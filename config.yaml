@@ -18,9 +18,22 @@ proxy-providers:
 # --- 在这里添加其他订阅 ---
   p2:
     type: http
-    url: "https://hk.gh-proxy.com/gist.githubusercontent.com/byrisk/172280d15a99a420c2ec0d190be8e40a/raw/all.yaml"
+    url: "https://hk.gh-proxy.com/raw.githubusercontent.com/JanuaryEleX/clash/refs/heads/main/1.yaml"
     interval: 1900
     path: ./proxy_providers/p2.yaml
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 1800
+    override:
+      additional-prefix: "全球 | "
+      udp: true
+
+  p3:
+    type: http
+    url: "https://hk.gh-proxy.com/gist.githubusercontent.com/byrisk/172280d15a99a420c2ec0d190be8e40a/raw/all.yaml"
+    interval: 2900
+    path: ./proxy_providers/p3.yaml
     health-check:
       enable: true
       url: http://www.gstatic.com/generate_204
@@ -45,7 +58,7 @@ proxies:
   # --- 落地节点 结束 ---
 
   # --- WARP 配置 开始 (已按您提供的标准重新翻译) ---
-  - name: WARP-Chain # WARP 链式代理
+  - name: WARP-链式代理 # WARP 链式代理
     type: wireguard
     ip: 172.16.0.2
     ipv6: 2606:4700:110:86d7:7a94:2546:6d1b:a26
@@ -59,7 +72,7 @@ proxies:
     dialer-proxy: ⚙️ 节点选择 # 通过“节点选择”组中的节点连接 WARP
     udp: true
 
-  - name: WARP-Direct # WARP 直连代理
+  - name: WARP-直连代理 # WARP 直连代理
     type: wireguard
     ip: 172.16.0.2
     ipv6: 2606:4700:110:86d7:7a94:2546:6d1b:a26
@@ -329,8 +342,8 @@ proxy-groups:
   - name: 🚀 WARP 代理
     type: select
     proxies:
-      - WARP-Chain # 链式代理
-      - WARP-Direct # 直连代理
+      - WARP-链式代理 # 链式代理
+      - WARP-直连代理 # 直连代理
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/cloudflare.svg
     # --- groupBaseOption 展开 ---
     interval: 0
@@ -350,7 +363,8 @@ proxy-groups:
       # - DIRECT # 根据需要可以取消注释DIRECT
     use: # 引用所有 proxy-providers
       - p1
-      - p2 # 如果有其他订阅，在这里添加
+      - p2
+      - p3 # 如果有其他订阅，在这里添加
     # include-all: true # include-all 与 use 互斥，优先使用 use 指定 provider
     exclude-filter: '^(?:webshare)$' # 排除落地节点 'webshare' (根据脚本逻辑添加)
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg
@@ -382,6 +396,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     exclude-filter: '^(?:webshare)$' # 排除落地节点 (根据脚本逻辑添加)
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/speed.svg
     # --- groupBaseOption 展开 ---
@@ -397,6 +412,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: '^(?:webshare)$' # Fallback 通常不需要排除落地节点，除非你有特殊需求
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/ambulance.svg
     # --- groupBaseOption 展开 ---
@@ -413,6 +429,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     exclude-filter: '^(?:webshare)$' # 排除落地节点 (根据脚本逻辑添加)
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/merry_go.svg
     # --- groupBaseOption 展开 ---
@@ -429,6 +446,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     exclude-filter: '^(?:webshare)$' # 排除落地节点 (根据脚本逻辑添加)
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/balance.svg
     # --- groupBaseOption 展开 ---
@@ -453,6 +471,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/youtube.svg
     # --- groupBaseOption 展开 ---
@@ -477,6 +496,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     exclude-filter: "(?i)港|hk|hongkong|hong kong|俄|ru|russia|澳|macao" # 脚本自带的过滤器
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/chatgpt.svg
     # --- groupBaseOption 展开 ---
@@ -501,6 +521,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/claude.svg
     # --- groupBaseOption 展开 ---
@@ -525,6 +546,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg # 图标可能需要调整
     # --- groupBaseOption 展开 ---
@@ -549,6 +571,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg # 图标可能需要调整
     # --- groupBaseOption 展开 ---
@@ -573,6 +596,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/telegram.svg
     # --- groupBaseOption 展开 ---
@@ -597,6 +621,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/google.svg
     # --- groupBaseOption 展开 ---
@@ -621,6 +646,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/apple.svg
     # --- groupBaseOption 展开 ---
@@ -645,6 +671,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/microsoft.svg
     # --- groupBaseOption 展开 ---
@@ -673,7 +700,8 @@ proxy-groups:
     type: select
     proxies:
       - DIRECT
-      - 🚀 WARP 代理
+      - WARP-链式代理 # 链式代理
+      - WARP-直连代理 # 直连代理
       - ⚙️ 节点选择
       - ♻️ 延迟选优
       - 🚑 故障转移
@@ -739,6 +767,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/openwrt.svg # 图标可能需要调整
     # --- groupBaseOption 展开 ---
@@ -763,6 +792,7 @@ proxy-groups:
     use:
       - p1
       - p2
+      - p3
     # exclude-filter: # 根据需要添加
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/fish.svg
     # --- groupBaseOption 展开 ---
