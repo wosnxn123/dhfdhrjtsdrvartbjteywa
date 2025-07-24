@@ -91,7 +91,7 @@
             "name": "💦 1 - VLESS - Domain - 443",
             "type": "vless",
             "server": "156.238.18.107",
-            "port": 443,
+            "port": 8443,
             "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
             "packet-encoding": "packetaddr",
             "ip-version": "dual",
