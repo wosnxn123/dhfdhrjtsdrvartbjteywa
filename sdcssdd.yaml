@@ -2,7 +2,7 @@
 proxy-providers:
   p1:
     type: http
-    url: "https://hk.gh-proxy.com/raw.githubusercontent.com/wosnxn123/dhfdhrjtsdrvartbjteywa/refs/heads/main/asas.yaml" # 请替换成你的订阅链接
+    url: "https://hk.gh-proxy.com/raw.githubusercontent.com/JanuaryEleX/clash/refs/heads/main/1.yaml" # 请替换成你的订阅链接
     interval: 900
     proxy: 🔰 模式选择 # <-- 已移除此行以解决 503 更新错误
     # path: ./proxy_providers/p1.yaml # 定义缓存路径 目前进行注释，这样更新节点数据更快
