@@ -1,0 +1,12 @@
+[Interface]
+PrivateKey = GIHAJs9Wpj3CHwA6oMYrkdhdOQbgRZ4VI9mUkog2MUk=
+Address    = 100.96.0.9/32
+Address    = 2606:4700:cf1:1000::6/128
+DNS        = 1.1.1.1
+MTU        = 1280
+
+[Peer]
+PublicKey  = bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=
+AllowedIPs = 0.0.0.0/0
+AllowedIPs = ::/0
+Endpoint   = 162.159.193.10:2408
