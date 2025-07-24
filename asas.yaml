@@ -1,2 +1,2902 @@
-proxies:
-  - {name: "1 - VLESS - Domain : 443", server: 156.238.18.107, port: 8443, client-fingerprint: randomized, type: vless, uuid: 403ea702-0202-433e-a599-a7dc050d7002, tls: true, alpn: [http%2F1.1], tfo: false, skip-cert-verify: false, servername: GOgogoBPB.rainDew.DpDnS.ORG, network: ws, ws-opts: {path: "/VMhpP8ZFhNtJ9Sel?ed=2560", headers: {Host: GOgogoBPB.rainDew.DpDnS.ORG}}}
+{
+    "mixed-port": 7890,
+    "ipv6": true,
+    "allow-lan": true,
+    "mode": "rule",
+    "log-level": "warning",
+    "disable-keep-alive": false,
+    "keep-alive-idle": 10,
+    "keep-alive-interval": 15,
+    "unified-delay": false,
+    "geo-auto-update": true,
+    "geo-update-interval": 168,
+    "external-controller": "127.0.0.1:9090",
+    "external-ui-url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+    "external-ui": "ui",
+    "external-controller-cors": {
+        "allow-origins": [
+            "*"
+        ],
+        "allow-private-network": true
+    },
+    "profile": {
+        "store-selected": true,
+        "store-fake-ip": true
+    },
+    "dns": {
+        "enable": true,
+        "listen": "0.0.0.0:1053",
+        "ipv6": true,
+        "respect-rules": true,
+        "use-system-hosts": false,
+        "nameserver": [
+            "https://8.8.8.8/dns-query#✅ Selector"
+        ],
+        "proxy-server-nameserver": [
+            "8.8.8.8#DIRECT"
+        ],
+        "nameserver-policy": {
+            "raw.githubusercontent.com": "8.8.8.8#DIRECT",
+            "time.apple.com": "8.8.8.8#DIRECT"
+        },
+        "hosts": {
+            "rule-set:malware": "127.0.0.1",
+            "rule-set:phishing": "127.0.0.1",
+            "rule-set:cryptominers": "127.0.0.1"
+        }
+    },
+    "tun": {
+        "enable": true,
+        "stack": "mixed",
+        "auto-route": true,
+        "strict-route": true,
+        "auto-detect-interface": true,
+        "dns-hijack": [
+            "any:53",
+            "tcp://any:53"
+        ],
+        "mtu": 9000
+    },
+    "sniffer": {
+        "enable": true,
+        "force-dns-mapping": true,
+        "parse-pure-ip": true,
+        "override-destination": false,
+        "sniff": {
+            "HTTP": {
+                "ports": [
+                    80,
+                    8080,
+                    8880,
+                    2052,
+                    2082,
+                    2086,
+                    2095
+                ]
+            },
+            "TLS": {
+                "ports": [
+                    443,
+                    8443,
+                    2053,
+                    2083,
+                    2087,
+                    2096
+                ]
+            }
+        }
+    },
+    "proxies": [
+        {
+            "name": "💦 1 - VLESS - Domain - 443",
+            "type": "vless",
+            "server": "156.238.18.107",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tc3hhy5rJ5ZDwGoB",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGoGObpB.RaINdEw.DPDNs.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 2 - VLESS - Domain - 443",
+            "type": "vless",
+            "server": "www.speedtest.net",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/V67s2ipDcMyuCKVw",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOgOGoBpb.rAiNDEW.dPdNs.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 3 - VLESS -  - 443",
+            "type": "vless",
+            "server": "gogogobpb.pages.dev.",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/WtJQ8vJ8BUrAJtkn",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOgOGobPB.raINdEW.DPdNS.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 4 - VLESS - IPv4 - 443",
+            "type": "vless",
+            "server": "172.66.44.116",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/vSwjKUaPTjKdsSqx",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "goGogObpB.RAinDeW.dPdNS.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 5 - VLESS - IPv4 - 443",
+            "type": "vless",
+            "server": "172.66.47.140",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/wpvfcrZ5V1XSryw6",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOGogOBpb.RaiNdew.DPDNs.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 6 - VLESS -  - 443",
+            "type": "vless",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/gXKehTuRVeUswbA4",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGoGObpB.rAiNDeW.dPdnS.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 7 - VLESS - IPv6 - 443",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/pmcQUn7ijRCNmreu",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "goGoGobPb.rAINdEw.Dpdns.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 8 - VLESS - IPv6 - 443",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/qj13T8cF050xAEjB",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGogOBPB.RAindeW.DPDNs.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 9 - VLESS - Domain - 8443",
+            "type": "vless",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/L1vwEO8y2FPad9zh",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGOgOBpB.rAINDew.DPdNs.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 10 - VLESS - Domain - 8443",
+            "type": "vless",
+            "server": "www.speedtest.net",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/yyLnUk5DhOBHio7V",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gogoGObPB.rAiNDew.Dpdns.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 11 - VLESS -  - 8443",
+            "type": "vless",
+            "server": "gogogobpb.pages.dev.",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/IfWYW7FRDCEV2zkZ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGOgObPb.RaINDeW.dPdns.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 12 - VLESS - IPv4 - 8443",
+            "type": "vless",
+            "server": "172.66.44.116",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/0LBg4HrQKGxmfCO6",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGOgOBPB.RaINdeW.DpdnS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 13 - VLESS - IPv4 - 8443",
+            "type": "vless",
+            "server": "172.66.47.140",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/MnyHz1Md9cqQhagT",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "goGOGoBpb.RaINdew.DPdns.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 14 - VLESS -  - 8443",
+            "type": "vless",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/yufnQ5EEKGIz78DX",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOgOgobPb.rAiNDew.dpDnS.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 15 - VLESS - IPv6 - 8443",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/JIaFtU891jZLU3II",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gogogoBpb.raiNdew.DPdnS.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 16 - VLESS - IPv6 - 8443",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 8443,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/y2OJQstVEjendGlB",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGoGoBPB.rAInDEW.DPdNS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 17 - VLESS - Domain - 2053",
+            "type": "vless",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/rHO1LYxdgQBGWd7G",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "goGogOBPB.raINdew.dPdNS.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 18 - VLESS - Domain - 2053",
+            "type": "vless",
+            "server": "www.speedtest.net",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/w0VpYWnAQkwSuYxi",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOgOgOBPb.Raindew.DPdnS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 19 - VLESS -  - 2053",
+            "type": "vless",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/I40802o42Ru5P2xL",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gogoGOBpb.rAindEw.DpDnS.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 20 - VLESS - IPv4 - 2053",
+            "type": "vless",
+            "server": "172.66.44.116",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/FajXOUvobDVXSord",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOgOgoBPB.RAinDEw.DpDns.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 21 - VLESS - IPv4 - 2053",
+            "type": "vless",
+            "server": "172.66.47.140",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/s9mx4iVqxW2FrbNP",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GogogobpB.raINDEw.dPDNS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 22 - VLESS -  - 2053",
+            "type": "vless",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/mhStCtFRprr5qN1V",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GogogoBPb.RaINdEW.dPDns.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 23 - VLESS - IPv6 - 2053",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/zTWWzLSYss7jpmUK",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGOGoBPB.rAindEW.dPdnS.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 24 - VLESS - IPv6 - 2053",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2053,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/aGCjpCpAx0waZ50m",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGOgObpB.raINdEw.DPdNS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 25 - VLESS - Domain - 2083",
+            "type": "vless",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/My4Ep0d1MwIqtf06",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOGOGoBpb.RaINdeW.DpDNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 26 - VLESS - Domain - 2083",
+            "type": "vless",
+            "server": "www.speedtest.net",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/TwVzBfZah1blaou0",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGOGObpB.RAINdeW.dPDNS.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 27 - VLESS -  - 2083",
+            "type": "vless",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/zbG5sCUAbLhUgXDw",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOgogOBPB.RAINDEW.dpdNs.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 28 - VLESS - IPv4 - 2083",
+            "type": "vless",
+            "server": "172.66.44.116",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/azh59j2UaiXK15qu",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GogOGOBpB.rAiNDEW.dPDNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 29 - VLESS - IPv4 - 2083",
+            "type": "vless",
+            "server": "172.66.47.140",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/c1ArRL5HeiZk9iNz",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gogogobpb.RAiNDEw.DpdNs.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 30 - VLESS -  - 2083",
+            "type": "vless",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/cyA1qAWsWqffzI9Z",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOgogobPb.RAinDEW.DPDnS.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 31 - VLESS - IPv6 - 2083",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/JcUyr9odHhDb7W3O",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGoGObpB.raiNDEw.dpDNs.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 32 - VLESS - IPv6 - 2083",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2083,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/cXakF8U2jj8IpGxd",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOGogOBPB.rAinDEw.dPDNs.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 33 - VLESS - Domain - 2087",
+            "type": "vless",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/IfiVP0BxNYaFLH9t",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGOgObpb.raiNDew.dPdns.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 34 - VLESS - Domain - 2087",
+            "type": "vless",
+            "server": "www.speedtest.net",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/EO195V1HSUj82NbR",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGogobpB.rAINdeW.dPdns.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 35 - VLESS -  - 2087",
+            "type": "vless",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/KgmSCC5hvTzXiQ4c",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "goGogoBPB.RAiNDew.DPDns.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 36 - VLESS - IPv4 - 2087",
+            "type": "vless",
+            "server": "172.66.44.116",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/uOKG7huiEKJdDCfG",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGogobpB.RaindEW.DPDns.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 37 - VLESS - IPv4 - 2087",
+            "type": "vless",
+            "server": "172.66.47.140",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/aznWGMwEVgwm7xeZ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GogoGobpb.rAINDeW.Dpdns.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 38 - VLESS -  - 2087",
+            "type": "vless",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/JfavF7jzdv01ovee",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGOgObPB.raiNdew.DpDns.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 39 - VLESS - IPv6 - 2087",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/cj3XG8KE4YIgU8Wn",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GogOGObPB.RAInDew.dpDns.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 40 - VLESS - IPv6 - 2087",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2087,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/Zfma2kkTtOpsKKRN",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOgogObpB.rAiNDeW.DPDnS.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 41 - VLESS - Domain - 2096",
+            "type": "vless",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/snkpXAsw2tPE7vyL",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GogOGOBPb.RAiNDew.dPdns.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 42 - VLESS - Domain - 2096",
+            "type": "vless",
+            "server": "www.speedtest.net",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/HWay8UlrKPKtsC3T",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gOGOGoBpB.RainDEw.dPDns.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 43 - VLESS -  - 2096",
+            "type": "vless",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/s88vAFXivU37Qmmg",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "goGOGOBpb.raINdEW.dpDNs.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 44 - VLESS - IPv4 - 2096",
+            "type": "vless",
+            "server": "172.66.44.116",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/7X0mLf0MWCen4k6h",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOGoGobPb.RaINDeW.dPdNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 45 - VLESS - IPv4 - 2096",
+            "type": "vless",
+            "server": "172.66.47.140",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/PTyiEP4CAeE1TM17",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "gogogObPb.RaINDEW.dPDNS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 46 - VLESS -  - 2096",
+            "type": "vless",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/yBWs22zq7UD1Tna2",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GoGoGobpB.raINdeW.dPDNs.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 47 - VLESS - IPv6 - 2096",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/iRdTb4tb8nKSufOL",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOGogObPb.raIndEW.DpdNS.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 48 - VLESS - IPv6 - 2096",
+            "type": "vless",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2096,
+            "uuid": "403ea702-0202-433e-a599-a7dc050d7002",
+            "packet-encoding": "packetaddr",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/s0pCGiT6D1L3cWpc",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "servername": "GOGogOBPb.RAinDeW.dPdNs.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 1 - Trojan - Domain - 443",
+            "type": "trojan",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr6uZYDxxV9OmYpHRy",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGoGoBpB.RaInDew.dpDnS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 2 - Trojan - Domain - 443",
+            "type": "trojan",
+            "server": "www.speedtest.net",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trzTyJ3Mdk6juY9qTr",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGogOBPB.rAInDew.dPDNs.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 3 - Trojan -  - 443",
+            "type": "trojan",
+            "server": "gogogobpb.pages.dev.",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trNmZeaMlwObz8ig72",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOgOBpB.RAIndew.dpDNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 4 - Trojan - IPv4 - 443",
+            "type": "trojan",
+            "server": "172.66.44.116",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trILDfYWdeF4ZzBwfq",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOGOBPb.RAINDEW.DpdnS.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 5 - Trojan - IPv4 - 443",
+            "type": "trojan",
+            "server": "172.66.47.140",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trtB0jgUSUM2IKjKS1",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogoGoBPb.rAINDEW.dPDNS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 6 - Trojan -  - 443",
+            "type": "trojan",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/triNnR7mpx09FW6Xs1",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgOGObPB.raiNDeW.dpdNS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 7 - Trojan - IPv6 - 443",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trz7j4a4NYgmtzq959",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GogOGObPB.raINdEw.DPdnS.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 8 - Trojan - IPv6 - 443",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trXqE7g864OiVvPGa6",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOgoGOBPb.RAINdew.DPdNs.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 9 - Trojan - Domain - 8443",
+            "type": "trojan",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trMbxcqWXfDodFgo00",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgOGOBPB.rAIndEw.dPDnS.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 10 - Trojan - Domain - 8443",
+            "type": "trojan",
+            "server": "www.speedtest.net",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr19LHFwzjNzYI90O2",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGogobPb.raINDeW.DPdns.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 11 - Trojan -  - 8443",
+            "type": "trojan",
+            "server": "gogogobpb.pages.dev.",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trVwHlHhBkKgdM2ezx",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGOgoBPB.RAiNdEw.dpDnS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 12 - Trojan - IPv4 - 8443",
+            "type": "trojan",
+            "server": "172.66.44.116",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr3Ru1Ohb3ApXExpNJ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGOGoBpb.rAINdEw.DPdns.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 13 - Trojan - IPv4 - 8443",
+            "type": "trojan",
+            "server": "172.66.47.140",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trxcxxrzuTCoaSswg0",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOGOgobPB.RaIndeW.DpDNS.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 14 - Trojan -  - 8443",
+            "type": "trojan",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trDpOaiwVYwWbIs6Nu",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGoGOBPB.RAindeW.dpdnS.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 15 - Trojan - IPv6 - 8443",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trBItU2HhJc7Xtw9ka",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGOGObpB.RaINdew.dPDNS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 16 - Trojan - IPv6 - 8443",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 8443,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trbfoxTiRnZ528wYz0",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOgOGObPb.rAindeW.DpDnS.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 17 - Trojan - Domain - 2053",
+            "type": "trojan",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trGIBC0qXm0DcFHSnM",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGOGoBpB.rAiNDew.dPDNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 18 - Trojan - Domain - 2053",
+            "type": "trojan",
+            "server": "www.speedtest.net",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trdTx2jWGp7vvst3Ee",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOGobpB.RaiNDEw.dPDnS.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 19 - Trojan -  - 2053",
+            "type": "trojan",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr0KhiPWZok1VMAp2O",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGOGoBPB.raiNDEw.dpDNs.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 20 - Trojan - IPv4 - 2053",
+            "type": "trojan",
+            "server": "172.66.44.116",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr3ZuxbxFI8T9HvmBZ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGOGOBPB.rAiNDEW.DpDns.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 21 - Trojan - IPv4 - 2053",
+            "type": "trojan",
+            "server": "172.66.47.140",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trgLuSNfoPZrb4kOdU",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGoGobPb.rAIndEw.DPDNS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 22 - Trojan -  - 2053",
+            "type": "trojan",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trWdcHcufyECIeYRjH",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOGOgobpb.RAiNdEW.dPdnS.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 23 - Trojan - IPv6 - 2053",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr5JLJ72jSGeE8dWy4",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgogObPb.RAindEW.DPDNS.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 24 - Trojan - IPv6 - 2053",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2053,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr4L2bPoTmqoQh96xK",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgOGobpB.rAiNDEW.DPdns.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 25 - Trojan - Domain - 2083",
+            "type": "trojan",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trRK6ByfJYj989cVOO",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOGOGobPb.rAiNDEW.DpdnS.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 26 - Trojan - Domain - 2083",
+            "type": "trojan",
+            "server": "www.speedtest.net",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trnV3IyCxWpIE7OCNM",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgoGobpb.raindeW.DPdns.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 27 - Trojan -  - 2083",
+            "type": "trojan",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr3MfYZ88E0ZkaQh1j",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOgoGobPB.rAINDew.dpdNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 28 - Trojan - IPv4 - 2083",
+            "type": "trojan",
+            "server": "172.66.44.116",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trbxahfSCSzGN4II0A",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGoGobpB.RAIndEw.dpDNS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 29 - Trojan - IPv4 - 2083",
+            "type": "trojan",
+            "server": "172.66.47.140",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trksHwKFCzmVLyLgVe",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOgogobPb.rAinDew.DpDnS.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 30 - Trojan -  - 2083",
+            "type": "trojan",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr4dhrwKHazLovYLKW",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOGObPb.rAIndEW.dPdNs.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 31 - Trojan - IPv6 - 2083",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trGlN5OnCQKDDRzfLI",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "goGOgOBpb.rAInDEW.DPdnS.ORG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 32 - Trojan - IPv6 - 2083",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2083,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trOEFb02daUss7F1GW",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "Gogogobpb.RAIndew.dPDNs.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 33 - Trojan - Domain - 2087",
+            "type": "trojan",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trJzEpN5AqRBReRgtr",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOGoGOBpB.raIndew.DPDns.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 34 - Trojan - Domain - 2087",
+            "type": "trojan",
+            "server": "www.speedtest.net",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trUxYpxoQ8ZIWUM4YJ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgoGobPb.RainDEw.DpDNS.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 35 - Trojan -  - 2087",
+            "type": "trojan",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trd1juGBlWNuBh44iQ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgogOBpB.RAiNdEw.dpDNs.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 36 - Trojan - IPv4 - 2087",
+            "type": "trojan",
+            "server": "172.66.44.116",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tryPWUrze8h8NaFHfq",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GogOgOBPB.rAINdeW.dPdNs.oRg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 37 - Trojan - IPv4 - 2087",
+            "type": "trojan",
+            "server": "172.66.47.140",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trKxFoP0tgHFFA2Cw8",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOgOBpb.RaINdEw.dpDNs.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 38 - Trojan -  - 2087",
+            "type": "trojan",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trUygERtakw3F6xhhR",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOgoGobpB.raINdEw.dpDNS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 39 - Trojan - IPv6 - 2087",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trftB1M6iJlkvdeap5",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GogOGoBPB.rAInDEw.dPdNS.oRG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 40 - Trojan - IPv6 - 2087",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2087,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trGP7aLcfAilP4uwwH",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgogoBPB.RAInDeW.dpDNS.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 41 - Trojan - Domain - 2096",
+            "type": "trojan",
+            "server": "gogogobpb.raindew.dpdns.org",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr5BnhDkp6hR8fnAWH",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOGoGOBPB.RaINdew.dPdNs.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 42 - Trojan - Domain - 2096",
+            "type": "trojan",
+            "server": "www.speedtest.net",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tra8Vr4oSIIO0n8Py2",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GogogOBpb.RaindEW.DpDNS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 43 - Trojan -  - 2096",
+            "type": "trojan",
+            "server": "gogogobpb.pages.dev.",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr4bySjjeyLaEBrVFz",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOgOBPb.rAINdeW.dpdNs.Org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 44 - Trojan - IPv4 - 2096",
+            "type": "trojan",
+            "server": "172.66.44.116",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trHQaokoMA1H14dDhZ",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gogOGobpb.raindEw.dpdNS.orG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 45 - Trojan - IPv4 - 2096",
+            "type": "trojan",
+            "server": "172.66.47.140",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trXluinnviVmDEToyL",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "gOgoGObpB.rAiNdEw.DpDNS.ORg",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 46 - Trojan -  - 2096",
+            "type": "trojan",
+            "server": "[gogogobpb.pages.dev.]",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trDk1lPUaUDezNC6gX",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGOgObpb.RaindeW.dPDnS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 47 - Trojan - IPv6 - 2096",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2c74",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/trfOAiStKJh1iKoadB",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GOgogobPb.rAiNDEW.DpdnS.OrG",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        },
+        {
+            "name": "💦 48 - Trojan - IPv6 - 2096",
+            "type": "trojan",
+            "server": "2606:4700:310c::ac42:2f8c",
+            "port": 2096,
+            "password": "j7Oqw*p4BCuV7eI*",
+            "ip-version": "dual",
+            "tls": true,
+            "network": "ws",
+            "tfo": true,
+            "mptcp": true,
+            "ws-opts": {
+                "path": "/tr75DbsLjW5OuXVqRR",
+                "headers": {
+                    "Host": "gogogobpb.raindew.dpdns.org"
+                },
+                "max-early-data": 2560,
+                "early-data-header-name": "Sec-WebSocket-Protocol"
+            },
+            "sni": "GoGOGobpb.raInDEw.dPDnS.org",
+            "alpn": [
+                "http/1.1"
+            ],
+            "client-fingerprint": "random",
+            "skip-cert-verify": false
+        }
+    ],
+    "proxy-groups": [
+        {
+            "name": "✅ Selector",
+            "type": "select",
+            "proxies": [
+                "💦 Best Ping 💥",
+                "💦 1 - VLESS - Domain - 443",
+                "💦 2 - VLESS - Domain - 443",
+                "💦 3 - VLESS -  - 443",
+                "💦 4 - VLESS - IPv4 - 443",
+                "💦 5 - VLESS - IPv4 - 443",
+                "💦 6 - VLESS -  - 443",
+                "💦 7 - VLESS - IPv6 - 443",
+                "💦 8 - VLESS - IPv6 - 443",
+                "💦 9 - VLESS - Domain - 8443",
+                "💦 10 - VLESS - Domain - 8443",
+                "💦 11 - VLESS -  - 8443",
+                "💦 12 - VLESS - IPv4 - 8443",
+                "💦 13 - VLESS - IPv4 - 8443",
+                "💦 14 - VLESS -  - 8443",
+                "💦 15 - VLESS - IPv6 - 8443",
+                "💦 16 - VLESS - IPv6 - 8443",
+                "💦 17 - VLESS - Domain - 2053",
+                "💦 18 - VLESS - Domain - 2053",
+                "💦 19 - VLESS -  - 2053",
+                "💦 20 - VLESS - IPv4 - 2053",
+                "💦 21 - VLESS - IPv4 - 2053",
+                "💦 22 - VLESS -  - 2053",
+                "💦 23 - VLESS - IPv6 - 2053",
+                "💦 24 - VLESS - IPv6 - 2053",
+                "💦 25 - VLESS - Domain - 2083",
+                "💦 26 - VLESS - Domain - 2083",
+                "💦 27 - VLESS -  - 2083",
+                "💦 28 - VLESS - IPv4 - 2083",
+                "💦 29 - VLESS - IPv4 - 2083",
+                "💦 30 - VLESS -  - 2083",
+                "💦 31 - VLESS - IPv6 - 2083",
+                "💦 32 - VLESS - IPv6 - 2083",
+                "💦 33 - VLESS - Domain - 2087",
+                "💦 34 - VLESS - Domain - 2087",
+                "💦 35 - VLESS -  - 2087",
+                "💦 36 - VLESS - IPv4 - 2087",
+                "💦 37 - VLESS - IPv4 - 2087",
+                "💦 38 - VLESS -  - 2087",
+                "💦 39 - VLESS - IPv6 - 2087",
+                "💦 40 - VLESS - IPv6 - 2087",
+                "💦 41 - VLESS - Domain - 2096",
+                "💦 42 - VLESS - Domain - 2096",
+                "💦 43 - VLESS -  - 2096",
+                "💦 44 - VLESS - IPv4 - 2096",
+                "💦 45 - VLESS - IPv4 - 2096",
+                "💦 46 - VLESS -  - 2096",
+                "💦 47 - VLESS - IPv6 - 2096",
+                "💦 48 - VLESS - IPv6 - 2096",
+                "💦 1 - Trojan - Domain - 443",
+                "💦 2 - Trojan - Domain - 443",
+                "💦 3 - Trojan -  - 443",
+                "💦 4 - Trojan - IPv4 - 443",
+                "💦 5 - Trojan - IPv4 - 443",
+                "💦 6 - Trojan -  - 443",
+                "💦 7 - Trojan - IPv6 - 443",
+                "💦 8 - Trojan - IPv6 - 443",
+                "💦 9 - Trojan - Domain - 8443",
+                "💦 10 - Trojan - Domain - 8443",
+                "💦 11 - Trojan -  - 8443",
+                "💦 12 - Trojan - IPv4 - 8443",
+                "💦 13 - Trojan - IPv4 - 8443",
+                "💦 14 - Trojan -  - 8443",
+                "💦 15 - Trojan - IPv6 - 8443",
+                "💦 16 - Trojan - IPv6 - 8443",
+                "💦 17 - Trojan - Domain - 2053",
+                "💦 18 - Trojan - Domain - 2053",
+                "💦 19 - Trojan -  - 2053",
+                "💦 20 - Trojan - IPv4 - 2053",
+                "💦 21 - Trojan - IPv4 - 2053",
+                "💦 22 - Trojan -  - 2053",
+                "💦 23 - Trojan - IPv6 - 2053",
+                "💦 24 - Trojan - IPv6 - 2053",
+                "💦 25 - Trojan - Domain - 2083",
+                "💦 26 - Trojan - Domain - 2083",
+                "💦 27 - Trojan -  - 2083",
+                "💦 28 - Trojan - IPv4 - 2083",
+                "💦 29 - Trojan - IPv4 - 2083",
+                "💦 30 - Trojan -  - 2083",
+                "💦 31 - Trojan - IPv6 - 2083",
+                "💦 32 - Trojan - IPv6 - 2083",
+                "💦 33 - Trojan - Domain - 2087",
+                "💦 34 - Trojan - Domain - 2087",
+                "💦 35 - Trojan -  - 2087",
+                "💦 36 - Trojan - IPv4 - 2087",
+                "💦 37 - Trojan - IPv4 - 2087",
+                "💦 38 - Trojan -  - 2087",
+                "💦 39 - Trojan - IPv6 - 2087",
+                "💦 40 - Trojan - IPv6 - 2087",
+                "💦 41 - Trojan - Domain - 2096",
+                "💦 42 - Trojan - Domain - 2096",
+                "💦 43 - Trojan -  - 2096",
+                "💦 44 - Trojan - IPv4 - 2096",
+                "💦 45 - Trojan - IPv4 - 2096",
+                "💦 46 - Trojan -  - 2096",
+                "💦 47 - Trojan - IPv6 - 2096",
+                "💦 48 - Trojan - IPv6 - 2096"
+            ]
+        },
+        {
+            "name": "💦 Best Ping 💥",
+            "type": "url-test",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": 30,
+            "tolerance": 50,
+            "proxies": [
+                "💦 1 - VLESS - Domain - 443",
+                "💦 2 - VLESS - Domain - 443",
+                "💦 3 - VLESS -  - 443",
+                "💦 4 - VLESS - IPv4 - 443",
+                "💦 5 - VLESS - IPv4 - 443",
+                "💦 6 - VLESS -  - 443",
+                "💦 7 - VLESS - IPv6 - 443",
+                "💦 8 - VLESS - IPv6 - 443",
+                "💦 9 - VLESS - Domain - 8443",
+                "💦 10 - VLESS - Domain - 8443",
+                "💦 11 - VLESS -  - 8443",
+                "💦 12 - VLESS - IPv4 - 8443",
+                "💦 13 - VLESS - IPv4 - 8443",
+                "💦 14 - VLESS -  - 8443",
+                "💦 15 - VLESS - IPv6 - 8443",
+                "💦 16 - VLESS - IPv6 - 8443",
+                "💦 17 - VLESS - Domain - 2053",
+                "💦 18 - VLESS - Domain - 2053",
+                "💦 19 - VLESS -  - 2053",
+                "💦 20 - VLESS - IPv4 - 2053",
+                "💦 21 - VLESS - IPv4 - 2053",
+                "💦 22 - VLESS -  - 2053",
+                "💦 23 - VLESS - IPv6 - 2053",
+                "💦 24 - VLESS - IPv6 - 2053",
+                "💦 25 - VLESS - Domain - 2083",
+                "💦 26 - VLESS - Domain - 2083",
+                "💦 27 - VLESS -  - 2083",
+                "💦 28 - VLESS - IPv4 - 2083",
+                "💦 29 - VLESS - IPv4 - 2083",
+                "💦 30 - VLESS -  - 2083",
+                "💦 31 - VLESS - IPv6 - 2083",
+                "💦 32 - VLESS - IPv6 - 2083",
+                "💦 33 - VLESS - Domain - 2087",
+                "💦 34 - VLESS - Domain - 2087",
+                "💦 35 - VLESS -  - 2087",
+                "💦 36 - VLESS - IPv4 - 2087",
+                "💦 37 - VLESS - IPv4 - 2087",
+                "💦 38 - VLESS -  - 2087",
+                "💦 39 - VLESS - IPv6 - 2087",
+                "💦 40 - VLESS - IPv6 - 2087",
+                "💦 41 - VLESS - Domain - 2096",
+                "💦 42 - VLESS - Domain - 2096",
+                "💦 43 - VLESS -  - 2096",
+                "💦 44 - VLESS - IPv4 - 2096",
+                "💦 45 - VLESS - IPv4 - 2096",
+                "💦 46 - VLESS -  - 2096",
+                "💦 47 - VLESS - IPv6 - 2096",
+                "💦 48 - VLESS - IPv6 - 2096",
+                "💦 1 - Trojan - Domain - 443",
+                "💦 2 - Trojan - Domain - 443",
+                "💦 3 - Trojan -  - 443",
+                "💦 4 - Trojan - IPv4 - 443",
+                "💦 5 - Trojan - IPv4 - 443",
+                "💦 6 - Trojan -  - 443",
+                "💦 7 - Trojan - IPv6 - 443",
+                "💦 8 - Trojan - IPv6 - 443",
+                "💦 9 - Trojan - Domain - 8443",
+                "💦 10 - Trojan - Domain - 8443",
+                "💦 11 - Trojan -  - 8443",
+                "💦 12 - Trojan - IPv4 - 8443",
+                "💦 13 - Trojan - IPv4 - 8443",
+                "💦 14 - Trojan -  - 8443",
+                "💦 15 - Trojan - IPv6 - 8443",
+                "💦 16 - Trojan - IPv6 - 8443",
+                "💦 17 - Trojan - Domain - 2053",
+                "💦 18 - Trojan - Domain - 2053",
+                "💦 19 - Trojan -  - 2053",
+                "💦 20 - Trojan - IPv4 - 2053",
+                "💦 21 - Trojan - IPv4 - 2053",
+                "💦 22 - Trojan -  - 2053",
+                "💦 23 - Trojan - IPv6 - 2053",
+                "💦 24 - Trojan - IPv6 - 2053",
+                "💦 25 - Trojan - Domain - 2083",
+                "💦 26 - Trojan - Domain - 2083",
+                "💦 27 - Trojan -  - 2083",
+                "💦 28 - Trojan - IPv4 - 2083",
+                "💦 29 - Trojan - IPv4 - 2083",
+                "💦 30 - Trojan -  - 2083",
+                "💦 31 - Trojan - IPv6 - 2083",
+                "💦 32 - Trojan - IPv6 - 2083",
+                "💦 33 - Trojan - Domain - 2087",
+                "💦 34 - Trojan - Domain - 2087",
+                "💦 35 - Trojan -  - 2087",
+                "💦 36 - Trojan - IPv4 - 2087",
+                "💦 37 - Trojan - IPv4 - 2087",
+                "💦 38 - Trojan -  - 2087",
+                "💦 39 - Trojan - IPv6 - 2087",
+                "💦 40 - Trojan - IPv6 - 2087",
+                "💦 41 - Trojan - Domain - 2096",
+                "💦 42 - Trojan - Domain - 2096",
+                "💦 43 - Trojan -  - 2096",
+                "💦 44 - Trojan - IPv4 - 2096",
+                "💦 45 - Trojan - IPv4 - 2096",
+                "💦 46 - Trojan -  - 2096",
+                "💦 47 - Trojan - IPv6 - 2096",
+                "💦 48 - Trojan - IPv6 - 2096"
+            ]
+        }
+    ],
+    "rule-providers": {
+        "malware": {
+            "type": "http",
+            "format": "text",
+            "behavior": "domain",
+            "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/malware.txt",
+            "path": "./ruleset/malware.txt",
+            "interval": 86400
+        },
+        "malware-cidr": {
+            "type": "http",
+            "format": "text",
+            "behavior": "ipcidr",
+            "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/malware-ip.txt",
+            "path": "./ruleset/malware-cidr.txt",
+            "interval": 86400
+        },
+        "phishing": {
+            "type": "http",
+            "format": "text",
+            "behavior": "domain",
+            "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/phishing.txt",
+            "path": "./ruleset/phishing.txt",
+            "interval": 86400
+        },
+        "phishing-cidr": {
+            "type": "http",
+            "format": "text",
+            "behavior": "ipcidr",
+            "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/phishing-ip.txt",
+            "path": "./ruleset/phishing-cidr.txt",
+            "interval": 86400
+        },
+        "cryptominers": {
+            "type": "http",
+            "format": "text",
+            "behavior": "domain",
+            "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/cryptominers.txt",
+            "path": "./ruleset/cryptominers.txt",
+            "interval": 86400
+        }
+    },
+    "rules": [
+        "NETWORK,udp,REJECT",
+        "RULE-SET,malware,REJECT",
+        "RULE-SET,phishing,REJECT",
+        "RULE-SET,cryptominers,REJECT",
+        "RULE-SET,malware-cidr,REJECT",
+        "RULE-SET,phishing-cidr,REJECT",
+        "MATCH,✅ Selector"
+    ],
+    "ntp": {
+        "enable": true,
+        "server": "time.cloudflare.com",
+        "port": 123,
+        "interval": 30
+    }
+}
