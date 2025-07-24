@@ -1,0 +1,2 @@
+proxies:
+  - {name: "1 - VLESS - Domain : 443", server: 156.238.18.107, port: 8443, client-fingerprint: randomized, type: vless, uuid: 403ea702-0202-433e-a599-a7dc050d7002, tls: true, alpn: [http%2F1.1], tfo: false, skip-cert-verify: false, servername: GOgogoBPB.rainDew.DpDnS.ORG, network: ws, ws-opts: {path: "/VMhpP8ZFhNtJ9Sel?ed=2560", headers: {Host: GOgogoBPB.rainDew.DpDnS.ORG}}}
