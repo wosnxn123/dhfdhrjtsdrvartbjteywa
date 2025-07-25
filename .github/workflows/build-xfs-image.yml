@@ -25,7 +25,8 @@ jobs:
       - name: Convert Filesystem to XFS and Resize
         run: |
           # 1. 创建一个 10G 的、带 qcow2 内置压缩的目标镜像
-          qemu-img create -f qcow2 -o compress debian-12-xfs-uncompacted.qcow2 10G
+          #    修正：使用 'compression_type=zlib' 代替 'compress' 来提高兼容性
+          qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           
           # 2. 将原始镜像的分区复制并扩展到新镜像中
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
