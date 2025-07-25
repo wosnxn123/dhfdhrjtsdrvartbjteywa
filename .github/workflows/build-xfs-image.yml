@@ -34,27 +34,28 @@ jobs:
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod 666 debian-12-xfs-uncompacted.qcow2
           
-          # 这个命令工作正常，并且它的日志是找到问题的关键
+          # 这步保持不变，它的日志帮助我们找到了 /dev/sda3
           sudo LIBGUESTFS_DEBUG=1 virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          # 核心修正 #1: 使用 'here document' 避免命令解析错误
-          # 核心修正 #2: 使用正确的设备 /dev/sda3
-          # 核心修正 #3: 使用 sh 调用 fstransform
-          # 核心修正 #4: 明确使用 run 命令启动虚拟机
-          echo "Converting filesystem on /dev/sda3 to XFS..."
+          # 核心修正 #1: fstransform 在一个独立的、未挂载的 guestfish 会话中运行
+          echo "Converting filesystem on /dev/sda3 to XFS (on an unmounted device)..."
           sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
           run
           sh "fstransform /dev/sda3 xfs"
           EOF
           echo "Filesystem conversion to XFS complete."
           
-          # 对零填充操作也使用同样稳健的模式
-          # guestfish 会自动挂载根文件系统到 /，所以可以直接在 / 下创建文件
-          echo "Zeroing out free space..."
+          # 核心修正 #2: 零填充在一个全新的、挂载了文件系统的 guestfish 会话中运行
+          echo "Zeroing out free space (on a mounted filesystem)..."
           sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
           run
+          # 挂载转换后的 XFS 文件系统
+          mount /dev/sda3 /
+          # 在挂载点下创建和删除文件
           sh "dd if=/dev/zero of=/zero.file bs=4M status=progress || true"
           rm /zero.file
+          # 良好实践：在使用后卸载
+          umount /
           EOF
           echo "Free space zeroed out."
           
