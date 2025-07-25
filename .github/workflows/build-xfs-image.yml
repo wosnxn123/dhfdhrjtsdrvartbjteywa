@@ -16,16 +16,20 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          # 修正: 添加 linux-headers-generic 来解决 supermin/libguestfs 的环境依赖问题
-          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic
+          # 修正: 添加 libguestfs-xfs 来为 libguestfs appliance 提供 XFS 支持
+          # 同时保留 linux-headers-generic 作为健壮性措施
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic libguestfs-xfs
 
       - name: Download Debian Cloud Image
         run: |
           wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
 
       - name: Convert Filesystem to XFS, Resize and Sparsify
+        # 终极调试: 添加 DEBUG 和 TRACE 环境变量
         env:
           LIBGUESTFS_BACKEND: direct
+          LIBGUESTFS_DEBUG: "1"
+          LIBGUESTFS_TRACE: "1"
         run: |
           set -ex
 
@@ -40,8 +44,6 @@ jobs:
           EOF
           echo "Filesystem conversion to XFS complete."
           
-          # --- Sparsify 步骤整合到这里 ---
-
           # 步骤 3: 填充零
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           sh "dd if=/dev/zero of=/zero.file bs=4M || true"
