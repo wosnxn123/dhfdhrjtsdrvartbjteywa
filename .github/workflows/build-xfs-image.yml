@@ -1,0 +1,54 @@
+name: Build and Compact Debian XFS Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools
+
+      - name: Download Debian Cloud Image
+        run: |
+          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
+
+      - name: Convert Filesystem to XFS and Resize
+        run: |
+          # 1. 创建一个 10G 的、带 qcow2 内置压缩的目标镜像
+          qemu-img create -f qcow2 -o compress debian-12-xfs-uncompacted.qcow2 10G
+          
+          # 2. 将原始镜像的分区复制并扩展到新镜像中
+          virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          
+          # 3. 使用 guestfish 将根文件系统转换为 XFS
+          guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
+          fstransform /dev/sda1 xfs
+          EOF
+          
+          echo "Filesystem conversion to XFS complete."
+
+      - name: Sparsify Image to Reduce Physical Size
+        run: |
+          # 使用 virt-sparsify 来移除文件系统中的空白空间，生成一个紧凑的镜像。
+          # 这是减小最终 Artifact 下载体积的关键步骤。
+          virt-sparsify debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
+          
+          echo "Image sparsified. Final physical size:"
+          ls -lh debian-12-xfs.qcow2
+
+      - name: Upload Compacted qcow2 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-12-xfs-qcow2
+          path: debian-12-xfs.qcow2
+          retention-days: 7
