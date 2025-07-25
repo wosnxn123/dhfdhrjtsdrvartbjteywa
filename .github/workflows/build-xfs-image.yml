@@ -22,35 +22,28 @@ jobs:
         run: |
           wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
 
-      # 核心修正：将所有 libguestfs 操作放在一个步骤中，并设置环境变量
       - name: Resize, Convert, and Sparsify Image
-        env:
-          # 这个环境变量对所有下面的 sudo 命令都至关重要
-          LIBGUESTFS_BACKEND: direct
         run: |
           set -ex
 
-          # 创建和准备镜像
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod 666 debian-12-xfs-uncompacted.qcow2
           
-          # 此命令现在会继承 LIBGUESTFS_BACKEND
-          sudo virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          # 核心修正：直接在 sudo 命令前声明环境变量
+          sudo LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          # 此命令现在也会继承 LIBGUESTFS_BACKEND，从而能正确初始化
-          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -x 'fstransform / xfs force:true'
+          # 核心修正：同样为 guestfish 命令声明环境变量
+          sudo LIBGUESTFS_BACKEND=direct guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -x 'fstransform / xfs force:true'
           echo "Filesystem conversion to XFS complete."
           
-          # 此命令同样继承 LIBGUESTFS_BACKEND
-          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
+          # 核心修正：为第二个 guestfish 命令也声明环境变量
+          sudo LIBGUESTFS_BACKEND=direct guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
             -x 'sh "dd if=/dev/zero of=/zero.file bs=4M || true"' \
             -x 'rm /zero.file'
           echo "Free space zeroed out."
           
-          # 同步文件系统缓存
           sudo sync
           
-          # 最后的压缩步骤
           qemu-img convert -c -O qcow2 debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
