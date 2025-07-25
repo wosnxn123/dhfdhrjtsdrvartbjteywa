@@ -16,7 +16,8 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic libguestfs-xfs
+          # 确保安装了包含 fstransform 可执行文件的 libguestfs-tools
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs libguestfs-xfs
 
       - name: Configure libguestfs for CI Environment
         run: |
@@ -34,22 +35,18 @@ jobs:
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod 666 debian-12-xfs-uncompacted.qcow2
           
-          # 这个命令工作正常，保持不变
           sudo LIBGUESTFS_DEBUG=1 virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          # 核心修正：使用多行脚本并以 'run' 命令开头，强制启动虚拟机
-          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
-          run
-          fstransform / xfs force:true
-          EOF
+          # 核心修正：使用 'sh' 命令来调用 fstransform 可执行文件
+          # 注意：这里不再需要 'run' 命令，因为 'sh' 会隐式地启动虚拟机
+          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
+            -x 'sh "fstransform /dev/sda1 xfs"'
           echo "Filesystem conversion to XFS complete."
           
-          # 核心修正：对第二个 guestfish 命令也应用相同的模式
-          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
-          run
-          sh "dd if=/dev/zero of=/zero.file bs=4M || true"
-          rm /zero.file
-          EOF
+          # 零填充操作本身就是 'sh' 命令，保持不变
+          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
+            -x 'sh "dd if=/dev/zero of=/zero.file bs=4M || true"' \
+            -x 'rm /zero.file'
           echo "Free space zeroed out."
           
           sudo sync
@@ -65,3 +62,4 @@ jobs:
           name: debian-12-xfs-qcow2
           path: debian-12-xfs.qcow2
           retention-days: 7
+
