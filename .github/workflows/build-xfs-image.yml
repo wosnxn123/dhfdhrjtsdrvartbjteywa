@@ -18,12 +18,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic libguestfs-xfs
 
-      # 核心修正：先创建目录，再写入文件
       - name: Configure libguestfs for CI Environment
         run: |
-          # 必须先创建这个目录，因为它不是默认存在的
           sudo mkdir -p /etc/libguestfs-tools.d
-          # 现在，写入配置文件就不会失败了
           echo 'apparmor_disable = 1' | sudo tee /etc/libguestfs-tools.d/99-apparmor-disable.conf
 
       - name: Download Debian Cloud Image
@@ -37,15 +34,22 @@ jobs:
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod 666 debian-12-xfs-uncompacted.qcow2
           
-          # 我们仍然保留 DEBUG 标志，以便在万一出现其他问题时获取详细日志
+          # 这个命令工作正常，保持不变
           sudo LIBGUESTFS_DEBUG=1 virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -x 'fstransform / xfs force:true'
+          # 核心修正：使用多行脚本并以 'run' 命令开头，强制启动虚拟机
+          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
+          run
+          fstransform / xfs force:true
+          EOF
           echo "Filesystem conversion to XFS complete."
           
-          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
-            -x 'sh "dd if=/dev/zero of=/zero.file bs=4M || true"' \
-            -x 'rm /zero.file'
+          # 核心修正：对第二个 guestfish 命令也应用相同的模式
+          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
+          run
+          sh "dd if=/dev/zero of=/zero.file bs=4M || true"
+          rm /zero.file
+          EOF
           echo "Free space zeroed out."
           
           sudo sync
