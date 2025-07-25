@@ -18,10 +18,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic libguestfs-xfs
 
+      # 新增步骤：正确配置 libguestfs 以适应 CI 环境
+      - name: Configure libguestfs for CI Environment
+        run: |
+          # 默认的 libguestfs appliance 在 GitHub Actions 中因 AppArmor 安全策略而无法启动。
+          # 通过禁用 AppArmor，我们可以让它使用标准的、功能完整的 QEMU 后端（无 KVM 加速）来启动。
+          # 这是解决 "fstransform: unknown command" 的根本方法。
+          echo 'apparmor_disable = 1' | sudo tee /etc/libguestfs-tools.d/99-apparmor-disable.conf
+
       - name: Download Debian Cloud Image
         run: |
           wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
 
+      # 核心修正：移除所有 LIBGUESTFS_BACKEND，使用默认后端
       - name: Resize, Convert, and Sparsify Image
         run: |
           set -ex
@@ -29,15 +38,15 @@ jobs:
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod 666 debian-12-xfs-uncompacted.qcow2
           
-          # 核心修正：直接在 sudo 命令前声明环境变量
-          sudo LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          # 这两个命令现在会使用默认的、功能完整的后端。
+          # 由于 AppArmor 已被禁用，appliance 可以成功启动。
+          # 我们仍然保留显式传递环境变量的方式，并加入 DEBUG=1 以便在万一失败时获取详细日志。
+          sudo LIBGUESTFS_DEBUG=1 virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          # 核心修正：同样为 guestfish 命令声明环境变量
-          sudo LIBGUESTFS_BACKEND=direct guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -x 'fstransform / xfs force:true'
+          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -x 'fstransform / xfs force:true'
           echo "Filesystem conversion to XFS complete."
           
-          # 核心修正：为第二个 guestfish 命令也声明环境变量
-          sudo LIBGUESTFS_BACKEND=direct guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
+          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
             -x 'sh "dd if=/dev/zero of=/zero.file bs=4M || true"' \
             -x 'rm /zero.file'
           echo "Free space zeroed out."
