@@ -38,16 +38,20 @@ jobs:
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
-          # 步骤 1: 在文件系统内部，将所有可用空间用零填充，然后删除零文件。
-          # 'dd' 命令会因为“磁盘空间不足”而失败，这是预期行为，所以我们用 '|| true' 来忽略这个错误。
+          # 修正 1: 使用 set -ex 确保任何命令失败都会立刻中止脚本并报错
+          set -ex
+
+          # 步骤 1: 填充零
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           sh "dd if=/dev/zero of=/zero.file bs=4M || true"
           rm /zero.file
           EOF
           echo "Free space zeroed out."
           
-          # 步骤 2: 使用 qemu-img convert 进行转换。
-          # 它会自动将零块转换成新 qcow2 文件中的“空洞”，从而实现压缩和瘦身。
+          # 修正 2: 在两个 I/O 密集型操作之间强制同步文件系统缓存
+          sync
+          
+          # 步骤 2: 转换并压缩
           qemu-img convert -c -O qcow2 debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
