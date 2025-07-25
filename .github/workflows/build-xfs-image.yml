@@ -26,28 +26,29 @@ jobs:
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
-          # 1. 创建目标镜像
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
-          
-          # 2. 修正权限问题
           chmod a+r debian-12-xfs-uncompacted.qcow2
-          
-          # 3. 复制并扩展分区
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
-          
-          # 4. 转换文件系统为 XFS
-          #    修正：添加 force:true 选项，以强制覆盖已挂载的文件系统
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           fstransform / xfs force:true
           EOF
-          
           echo "Filesystem conversion to XFS complete."
 
       - name: Sparsify Image to Reduce Physical Size
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
-          virt-sparsify debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
+          # 步骤 1: 在文件系统内部，将所有可用空间用零填充，然后删除零文件。
+          # 'dd' 命令会因为“磁盘空间不足”而失败，这是预期行为，所以我们用 '|| true' 来忽略这个错误。
+          guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
+          sh "dd if=/dev/zero of=/zero.file bs=4M || true"
+          rm /zero.file
+          EOF
+          echo "Free space zeroed out."
+          
+          # 步骤 2: 使用 qemu-img convert 进行转换。
+          # 它会自动将零块转换成新 qcow2 文件中的“空洞”，从而实现压缩和瘦身。
+          qemu-img convert -c -O qcow2 debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
           ls -lh debian-12-xfs.qcow2
