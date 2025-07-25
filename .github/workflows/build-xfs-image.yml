@@ -24,12 +24,17 @@ jobs:
 
       - name: Convert Filesystem to XFS and Resize
         env:
-          # 修正：设置 libguestfs 后端为 'direct' 以避免 KVM/libvirt 权限问题
           LIBGUESTFS_BACKEND: direct
         run: |
-          # 1. 创建一个 10G 的、带 qcow2 内置压缩的目标镜像
+          # 1. 创建一个 10G 的目标镜像
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           
+          # 修正：为新创建的镜像文件添加全局可读权限，以解决 'Permission denied' 问题
+          chmod a+r debian-12-xfs-uncompacted.qcow2
+          
+          echo "Permissions for the uncompacted image:"
+          ls -l debian-12-xfs-uncompacted.qcow2
+
           # 2. 将原始镜像的分区复制并扩展到新镜像中
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
@@ -42,7 +47,6 @@ jobs:
 
       - name: Sparsify Image to Reduce Physical Size
         env:
-          # 修正：同样为 virt-sparsify 设置 'direct' 后端
           LIBGUESTFS_BACKEND: direct
         run: |
           # 使用 virt-sparsify 来移除文件系统中的空白空间，生成一个紧凑的镜像。
