@@ -31,19 +31,17 @@ jobs:
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod 666 debian-12-xfs-uncompacted.qcow2
           
+          # virt-resize 保持不变，它工作得很好
           sudo virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          # 修正: 移除 guestfish 命令中的 -i 标志
-          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
-          fstransform / xfs force:true
-          EOF
+          # 修正: 使用 -x 参数替代 heredoc
+          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -x 'fstransform / xfs force:true'
           echo "Filesystem conversion to XFS complete."
           
-          # 修正: 移除 guestfish 命令中的 -i 标志
-          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
-          sh "dd if=/dev/zero of=/zero.file bs=4M || true"
-          rm /zero.file
-          EOF
+          # 修正: 使用多个 -x 参数执行多个命令
+          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 \
+            -x 'sh "dd if=/dev/zero of=/zero.file bs=4M || true"' \
+            -x 'rm /zero.file'
           echo "Free space zeroed out."
           
           sudo sync
