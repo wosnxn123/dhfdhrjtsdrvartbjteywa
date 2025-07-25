@@ -16,7 +16,6 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          # 修正：添加 xfsprogs 包，以提供对 XFS 文件系统的支持
           sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs
 
       - name: Download Debian Cloud Image
@@ -37,8 +36,9 @@ jobs:
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
           # 4. 转换文件系统为 XFS
+          #    修正：添加 force:true 选项，以强制覆盖已挂载的文件系统
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
-          fstransform / xfs
+          fstransform / xfs force:true
           EOF
           
           echo "Filesystem conversion to XFS complete."
