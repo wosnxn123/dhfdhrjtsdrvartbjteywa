@@ -16,42 +16,43 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs
+          # 修正: 添加 linux-headers-generic 来解决 supermin/libguestfs 的环境依赖问题
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic
 
       - name: Download Debian Cloud Image
         run: |
           wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
 
-      - name: Convert Filesystem to XFS and Resize
+      - name: Convert Filesystem to XFS, Resize and Sparsify
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
+          set -ex
+
+          # 步骤 1: 创建目标镜像并调整分区大小
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           chmod a+r debian-12-xfs-uncompacted.qcow2
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          
+          # 步骤 2: 进行文件系统转换
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           fstransform / xfs force:true
           EOF
           echo "Filesystem conversion to XFS complete."
+          
+          # --- Sparsify 步骤整合到这里 ---
 
-      - name: Sparsify Image to Reduce Physical Size
-        env:
-          LIBGUESTFS_BACKEND: direct
-        run: |
-          # 修正 1: 使用 set -ex 确保任何命令失败都会立刻中止脚本并报错
-          set -ex
-
-          # 步骤 1: 填充零
+          # 步骤 3: 填充零
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           sh "dd if=/dev/zero of=/zero.file bs=4M || true"
           rm /zero.file
           EOF
           echo "Free space zeroed out."
           
-          # 修正 2: 在两个 I/O 密集型操作之间强制同步文件系统缓存
+          # 步骤 4: 强制同步文件系统缓存
           sync
           
-          # 步骤 2: 转换并压缩
+          # 步骤 5: 转换并压缩成最终文件
           qemu-img convert -c -O qcow2 debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
