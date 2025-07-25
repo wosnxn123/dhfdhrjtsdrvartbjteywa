@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,45 +16,46 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          # 修正: 添加 libguestfs-xfs 来为 libguestfs appliance 提供 XFS 支持
-          # 同时保留 linux-headers-generic 作为健壮性措施
+          # 保留所有我们之前确认的依赖项
           sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs linux-headers-generic libguestfs-xfs
 
       - name: Download Debian Cloud Image
         run: |
           wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
 
-      - name: Convert Filesystem to XFS, Resize and Sparsify
-        # 终极调试: 添加 DEBUG 和 TRACE 环境变量
+      - name: Convert, Resize, and Sparsify Image
+        # 我们不再需要调试环境变量了
         env:
           LIBGUESTFS_BACKEND: direct
-          LIBGUESTFS_DEBUG: "1"
-          LIBGUESTFS_TRACE: "1"
         run: |
           set -ex
 
-          # 步骤 1: 创建目标镜像并调整分区大小
+          # 步骤 1: 创建目标镜像 (作为 runner 用户)
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
-          chmod a+r debian-12-xfs-uncompacted.qcow2
-          virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          # 关键: 确保 root 稍后可以写入，其他用户可以读取
+          chmod 666 debian-12-xfs-uncompacted.qcow2
           
-          # 步骤 2: 进行文件系统转换
-          guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
+          # 步骤 2: 调整分区大小 (需要 root 权限)
+          sudo virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          
+          # 步骤 3: 进行文件系统转换 (需要 root 权限)
+          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           fstransform / xfs force:true
           EOF
           echo "Filesystem conversion to XFS complete."
           
-          # 步骤 3: 填充零
-          guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
+          # 步骤 4: 填充零 (需要 root 权限)
+          sudo guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
           sh "dd if=/dev/zero of=/zero.file bs=4M || true"
           rm /zero.file
           EOF
           echo "Free space zeroed out."
           
-          # 步骤 4: 强制同步文件系统缓存
-          sync
+          # 步骤 5: 强制同步文件系统缓存 (以 root 身份执行更可靠)
+          sudo sync
           
-          # 步骤 5: 转换并压缩成最终文件
+          # 步骤 6: 转换并压缩成最终文件 (作为 runner 用户)
+          # qemu-img 不需要 root，并且这样可以确保生成的文件归 runner 用户所有，便于上传
           qemu-img convert -c -O qcow2 debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
