@@ -36,10 +36,9 @@ jobs:
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
           # 4. 转换文件系统为 XFS
-          #    修正：在 fstransform 之前，必须先挂载文件系统
+          #    修正：让 -i 选项自动挂载，然后直接对挂载点 '/' 进行转换
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
-          mount /dev/sda1 /
-          fstransform /dev/sda1 xfs
+          fstransform / xfs
           EOF
           
           echo "Filesystem conversion to XFS complete."
