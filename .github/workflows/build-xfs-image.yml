@@ -26,20 +26,19 @@ jobs:
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
-          # 1. 创建一个 10G 的目标镜像
+          # 1. 创建目标镜像
           qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
           
-          # 修正：为新创建的镜像文件添加全局可读权限，以解决 'Permission denied' 问题
+          # 2. 修正权限问题
           chmod a+r debian-12-xfs-uncompacted.qcow2
           
-          echo "Permissions for the uncompacted image:"
-          ls -l debian-12-xfs-uncompacted.qcow2
-
-          # 2. 将原始镜像的分区复制并扩展到新镜像中
+          # 3. 复制并扩展分区
           virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
           
-          # 3. 使用 guestfish 将根文件系统转换为 XFS
+          # 4. 转换文件系统为 XFS
+          #    修正：在 fstransform 之前，必须先挂载文件系统
           guestfish --rw -a debian-12-xfs-uncompacted.qcow2 -i <<'EOF'
+          mount /dev/sda1 /
           fstransform /dev/sda1 xfs
           EOF
           
@@ -49,7 +48,6 @@ jobs:
         env:
           LIBGUESTFS_BACKEND: direct
         run: |
-          # 使用 virt-sparsify 来移除文件系统中的空白空间，生成一个紧凑的镜像。
           virt-sparsify debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
