@@ -1,4 +1,4 @@
-name: Build and Release Debian 13 (Trixie) XFS Image
+name: Build and Release Debian 13 (Trixie) Multi-Format Images
 
 on:
   push:
@@ -30,25 +30,31 @@ jobs:
         run: |
           wget -O original.qcow2 https://cdimage.debian.org/images/cloud/trixie/daily/latest/debian-13-nocloud-amd64-daily.qcow2
 
-      - name: Define Image Filename
+      - name: Define Image Basename
         id: image_info
-        run: echo "filename=debian-13-xfs.qcow2" >> $GITHUB_OUTPUT
+        run: echo "basename=debian-13-xfs" >> $GITHUB_OUTPUT
 
-      - name: Resize, Convert, and Sparsify Image
+      - name: Resize, Convert, and Generate Final Images
         run: |
           set -ex
           
-          IMAGE_NAME=${{ steps.image_info.outputs.filename }}
-          UNCOMPACTED_IMAGE_NAME="debian-13-xfs-uncompacted.qcow2"
+          # 从上一步获取基础文件名
+          BASENAME=${{ steps.image_info.outputs.basename }}
+          
+          # 定义所有中间和最终镜像的文件名
+          UNCOMPACTED_IMAGE_NAME="${BASENAME}-uncompacted.qcow2"
+          QCOW2_IMAGE_NAME="${BASENAME}.qcow2"
+          RAW_IMAGE_NAME="${BASENAME}.raw"
+          VHD_IMAGE_NAME="${BASENAME}.vhd"
+          VHDX_IMAGE_NAME="${BASENAME}.vhdx"
 
           # 步骤 1: 创建目标镜像并调整原始镜像分区
           qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 10G
           chmod 666 $UNCOMPACTED_IMAGE_NAME
           sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
           
-          # 步骤 2: 动态查找根分区 (最终健壮版)
+          # 步骤 2: 动态查找根分区 (通过文件系统类型)
           echo "Finding the root partition in the resized image by its filesystem type (ext4)..."
-          # 不再依赖挂载点'/'，而是直接查找ext4文件系统，因为它是转换前的格式
           ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w 'ext4' | awk '{print $1}')
           
           if [ -z "$ROOT_PARTITION" ]; then
@@ -64,9 +70,8 @@ jobs:
           sudo virt-rescue --rw -a $UNCOMPACTED_IMAGE_NAME --sh "fstransform ${ROOT_PARTITION} xfs"
           echo "Filesystem conversion to XFS complete."
           
-          # 步骤 4: 使用找到的根分区名进行挂载和零填充
+          # 步骤 4: 使用找到的根分区名进行挂载和零填充（这是创建“黄金母版”的最后一步）
           echo "Zeroing out free space using guestfish..."
-          # fstransform 之后，文件系统已经是 xfs，所以 guestfish 可以识别并挂载它
           sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<EOF
           run
           mount ${ROOT_PARTITION} /
@@ -74,20 +79,36 @@ jobs:
           rm /zero.file
           umount /
           EOF
-          echo "Free space zeroed out."
+          echo "Free space zeroed out. Golden master image is ready."
           
           sudo sync
           
-          # 步骤 5: 最终压缩
-          qemu-img convert -c -O qcow2 $UNCOMPACTED_IMAGE_NAME $IMAGE_NAME
+          # 步骤 5: 从黄金母版并行转换出所有目标格式
+          echo "Converting the master image to all target formats..."
           
-          echo "Image sparsified. Final physical size:"
-          ls -lh $IMAGE_NAME
+          # 生成 qcow2 格式 (压缩)
+          qemu-img convert -c -O qcow2 $UNCOMPACTED_IMAGE_NAME $QCOW2_IMAGE_NAME
+          
+          # 生成 raw 格式
+          qemu-img convert -O raw $UNCOMPACTED_IMAGE_NAME $RAW_IMAGE_NAME
+          
+          # 生成 vhd 格式 (在 qemu-img 中称为 vpc)
+          qemu-img convert -O vpc $UNCOMPACTED_IMAGE_NAME $VHD_IMAGE_NAME
+          
+          # 生成 vhdx 格式
+          qemu-img convert -O vhdx $UNCOMPACTED_IMAGE_NAME $VHDX_IMAGE_NAME
+          
+          echo "All image formats have been generated. Final physical sizes:"
+          ls -lh ${BASENAME}.*
 
-      - name: Create Release and Upload Asset
+      - name: Create Release and Upload All Image Assets
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.image_info.outputs.filename }}
-          tag_name: debian-13-xfs-${{ GITHUB.RUN_ID }}
-          name: "Debian 13 XFS Image Build ${{ GITHUB.RUN_ID }}"
+          # 使用通配符来匹配并上传所有生成的镜像文件
+          files: ${{ steps.image_info.outputs.basename }}.*
+          tag_name: debian-13-xfs-${{ github.run_id }}
+          name: "Debian 13 XFS Images (Build ${{ github.run_id }})"
+          body: |
+            Automated build of Debian 13 (Trixie) with an XFS root filesystem.
+            Images are provided in multiple formats for convenience.
           prerelease: true
