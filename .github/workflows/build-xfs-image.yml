@@ -44,16 +44,17 @@ jobs:
           # 步骤 1: 创建目标镜像并调整原始镜像分区
           qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 10G
           chmod 666 $UNCOMPACTED_IMAGE_NAME
-          # 这里的 /dev/sda1 是正确的，因为它指的是 *源* 镜像中的分区
           sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
           
-          # 步骤 2: 动态查找新镜像中的根分区设备名
-          # 这是解决分区被重命名 (sda1 -> sda3) 的关键步骤
+          # 步骤 2: 动态查找新镜像中的根分区设备名 (高度兼容版)
           echo "Finding the root partition in the resized image..."
-          # 使用 virt-filesystems 准确找到挂载点为 '/' 的分区
-          ROOT_PARTITION=$(sudo virt-filesystems --mountpoint / -a $UNCOMPACTED_IMAGE_NAME)
+          # 使用 `virt-filesystems --long` 结合 `grep` 和 `awk`，兼容旧版本工具
+          ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w '/' | awk '{print $1}')
           if [ -z "$ROOT_PARTITION" ]; then
             echo "::error::Could not find root partition ('/') in the resized image."
+            # 打印 virt-filesystems 的原始输出以便调试
+            echo "::debug::virt-filesystems output:"
+            sudo virt-filesystems --long --all -a $UNCOMPACTED_IMAGE_NAME
             exit 1
           fi
           echo "Root partition found: $ROOT_PARTITION"
