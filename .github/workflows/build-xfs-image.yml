@@ -46,18 +46,18 @@ jobs:
           chmod 666 $UNCOMPACTED_IMAGE_NAME
           sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
           
-          # 步骤 2: 动态查找新镜像中的根分区设备名 (高度兼容版)
-          echo "Finding the root partition in the resized image..."
-          # 使用 `virt-filesystems --long` 结合 `grep` 和 `awk`，兼容旧版本工具
-          ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w '/' | awk '{print $1}')
+          # 步骤 2: 动态查找根分区 (最终健壮版)
+          echo "Finding the root partition in the resized image by its filesystem type (ext4)..."
+          # 不再依赖挂载点'/'，而是直接查找ext4文件系统，因为它是转换前的格式
+          ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w 'ext4' | awk '{print $1}')
+          
           if [ -z "$ROOT_PARTITION" ]; then
-            echo "::error::Could not find root partition ('/') in the resized image."
-            # 打印 virt-filesystems 的原始输出以便调试
+            echo "::error::Could not find the ext4 root partition to convert."
             echo "::debug::virt-filesystems output:"
             sudo virt-filesystems --long --all -a $UNCOMPACTED_IMAGE_NAME
             exit 1
           fi
-          echo "Root partition found: $ROOT_PARTITION"
+          echo "Root partition to be converted found: $ROOT_PARTITION"
 
           # 步骤 3: 使用找到的根分区名进行文件系统转换
           echo "Converting filesystem on $ROOT_PARTITION to XFS using virt-rescue..."
@@ -66,6 +66,7 @@ jobs:
           
           # 步骤 4: 使用找到的根分区名进行挂载和零填充
           echo "Zeroing out free space using guestfish..."
+          # fstransform 之后，文件系统已经是 xfs，所以 guestfish 可以识别并挂载它
           sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<EOF
           run
           mount ${ROOT_PARTITION} /
