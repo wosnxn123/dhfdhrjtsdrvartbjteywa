@@ -1,7 +1,7 @@
 # GitHub Actions Workflow: Build, Archive, and Release Debian 13 (Trixie) Multi-Format Images
 # This workflow automates creating Debian 13 images with an XFS root filesystem.
-# It uploads uncompressed images to the workflow's artifacts and publishes
-# compressed archives to a public GitHub Release.
+# It uploads each uncompressed image format as a separate, clearly-named artifact,
+# and publishes compressed archives to a public GitHub Release.
 
 name: Build and Release Debian 13 (Trixie) Multi-Format Images
 
@@ -106,16 +106,30 @@ jobs:
           echo "All files generated and compressed. Final list:"
           ls -lh ${BASENAME}*
 
-      # 9. Upload Uncompressed Images to Artifacts
-      - name: Upload Uncompressed Images to Artifacts
+      # 9. (已修改) 分别上传每一个未压缩的镜像，使其在构建产物中清晰可见
+      - name: Upload QCOW2 Image to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: debian-13-xfs-uncompressed-images
-          path: |
-            ${{ steps.image_info.outputs.basename }}.qcow2
-            ${{ steps.image_info.outputs.basename }}.raw
-            ${{ steps.image_info.outputs.basename }}.vhd
-            ${{ steps.image_info.outputs.basename }}.vhdx
+          name: ${{ steps.image_info.outputs.basename }}.qcow2
+          path: ${{ steps.image_info.outputs.basename }}.qcow2
+
+      - name: Upload RAW Image to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.image_info.outputs.basename }}.raw
+          path: ${{ steps.image_info.outputs.basename }}.raw
+
+      - name: Upload VHD Image to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.image_info.outputs.basename }}.vhd
+          path: ${{ steps.image_info.outputs.basename }}.vhd
+
+      - name: Upload VHDX Image to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.image_info.outputs.basename }}.vhdx
+          path: ${{ steps.image_info.outputs.basename }}.vhdx
 
       # 10. Create GitHub Release and Upload Compressed Archives
       - name: Create Release and Upload Compressed Archives
