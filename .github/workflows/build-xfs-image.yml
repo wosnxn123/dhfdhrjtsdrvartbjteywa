@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    # 需要写入权限来创建 Release
     permissions:
       contents: write
       
@@ -39,23 +38,36 @@ jobs:
         run: |
           set -ex
           
-          # 从上一步获取文件名
           IMAGE_NAME=${{ steps.image_info.outputs.filename }}
           UNCOMPACTED_IMAGE_NAME="debian-13-xfs-uncompacted.qcow2"
 
+          # 步骤 1: 创建目标镜像并调整原始镜像分区
           qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 10G
           chmod 666 $UNCOMPACTED_IMAGE_NAME
-          
+          # 这里的 /dev/sda1 是正确的，因为它指的是 *源* 镜像中的分区
           sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
           
-          echo "Converting filesystem on /dev/sda1 to XFS using virt-rescue..."
-          sudo virt-rescue --rw -a $UNCOMPACTED_IMAGE_NAME --sh "fstransform /dev/sda1 xfs"
+          # 步骤 2: 动态查找新镜像中的根分区设备名
+          # 这是解决分区被重命名 (sda1 -> sda3) 的关键步骤
+          echo "Finding the root partition in the resized image..."
+          # 使用 virt-filesystems 准确找到挂载点为 '/' 的分区
+          ROOT_PARTITION=$(sudo virt-filesystems --mountpoint / -a $UNCOMPACTED_IMAGE_NAME)
+          if [ -z "$ROOT_PARTITION" ]; then
+            echo "::error::Could not find root partition ('/') in the resized image."
+            exit 1
+          fi
+          echo "Root partition found: $ROOT_PARTITION"
+
+          # 步骤 3: 使用找到的根分区名进行文件系统转换
+          echo "Converting filesystem on $ROOT_PARTITION to XFS using virt-rescue..."
+          sudo virt-rescue --rw -a $UNCOMPACTED_IMAGE_NAME --sh "fstransform ${ROOT_PARTITION} xfs"
           echo "Filesystem conversion to XFS complete."
           
+          # 步骤 4: 使用找到的根分区名进行挂载和零填充
           echo "Zeroing out free space using guestfish..."
-          sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<'EOF'
+          sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<EOF
           run
-          mount /dev/sda1 /
+          mount ${ROOT_PARTITION} /
           sh "dd if=/dev/zero of=/zero.file bs=4M status=progress || true"
           rm /zero.file
           umount /
@@ -64,6 +76,7 @@ jobs:
           
           sudo sync
           
+          # 步骤 5: 最终压缩
           qemu-img convert -c -O qcow2 $UNCOMPACTED_IMAGE_NAME $IMAGE_NAME
           
           echo "Image sparsified. Final physical size:"
@@ -72,11 +85,7 @@ jobs:
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
-          # 要上传的文件
           files: ${{ steps.image_info.outputs.filename }}
-          # 使用日期和时间生成一个唯一的 tag 和 Release 名称
           tag_name: debian-13-xfs-${{ GITHUB.RUN_ID }}
           name: "Debian 13 XFS Image Build ${{ GITHUB.RUN_ID }}"
-          # 标记这是一个预发布版本
           prerelease: true
-
