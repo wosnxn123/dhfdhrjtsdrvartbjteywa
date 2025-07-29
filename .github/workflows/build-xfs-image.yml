@@ -1,4 +1,4 @@
-name: Build and Compact Debian XFS Image
+name: Build and Compact Debian 13 (Trixie) XFS Image
 
 on:
   push:
@@ -20,50 +20,58 @@ jobs:
 
       - name: Configure libguestfs for CI Environment
         run: |
+          # 禁用 AppArmor 可以避免在某些 CI 环境中出现权限问题
           sudo mkdir -p /etc/libguestfs-tools.d
           echo 'apparmor_disable = 1' | sudo tee /etc/libguestfs-tools.d/99-apparmor-disable.conf
 
-      - name: Download Debian Cloud Image
+      - name: Download Debian 13 (Trixie) Cloud Image
         run: |
-          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2
+          # 更新为 Debian 13 (Trixie) 的最新 nocloud 镜像链接
+          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/trixie/daily/latest/debian-13-nocloud-amd64-daily.qcow2
 
       - name: Resize, Convert, and Sparsify Image
         run: |
           set -ex
 
-          qemu-img create -f qcow2 -o compression_type=zlib debian-12-xfs-uncompacted.qcow2 10G
-          chmod 666 debian-12-xfs-uncompacted.qcow2
+          # 创建一个 10G 的稀疏文件作为目标镜像
+          qemu-img create -f qcow2 -o compression_type=zlib debian-13-xfs-uncompacted.qcow2 10G
+          chmod 666 debian-13-xfs-uncompacted.qcow2
           
-          # 步骤 1: 调整大小 (保持不变)
-          sudo LIBGUESTFS_DEBUG=1 virt-resize --expand /dev/sda1 original.qcow2 debian-12-xfs-uncompacted.qcow2
+          # 步骤 1: 调整分区大小。virt-resize 会自动处理分区表和文件系统扩展
+          # 我们仍然扩展 /dev/sda1，因为这是原始镜像中的根分区
+          sudo virt-resize --expand /dev/sda1 original.qcow2 debian-13-xfs-uncompacted.qcow2
           
-          # 核心修正: 使用 virt-rescue 来执行 fstransform
-          # virt-rescue 提供了 fstransform 所需的“未挂载”环境，从而解决了根本矛盾
-          echo "Converting filesystem on /dev/sda3 to XFS using virt-rescue..."
-          sudo LIBGUESTFS_DEBUG=1 virt-rescue --rw -a debian-12-xfs-uncompacted.qcow2 --sh "fstransform /dev/sda3 xfs"
+          # 步骤 2: 使用 virt-rescue 在未挂载的环境中将文件系统转换为 XFS
+          # 这是解决之前遇到的逻辑冲突的关键步骤
+          echo "Converting filesystem on /dev/sda1 to XFS using virt-rescue..."
+          # 注意：virt-resize 扩展了 /dev/sda1，所以我们转换的目标也是 /dev/sda1
+          sudo virt-rescue --rw -a debian-13-xfs-uncompacted.qcow2 --sh "fstransform /dev/sda1 xfs"
           echo "Filesystem conversion to XFS complete."
           
-          # 步骤 3: 使用 guestfish 进行零填充 (此工具非常适合此任务)
+          # 步骤 3: 使用 guestfish 挂载文件系统并进行零填充，以优化压缩
           echo "Zeroing out free space using guestfish..."
-          sudo LIBGUESTFS_DEBUG=1 guestfish --rw -a debian-12-xfs-uncompacted.qcow2 <<'EOF'
+          sudo guestfish --rw -a debian-13-xfs-uncompacted.qcow2 <<'EOF'
           run
-          mount /dev/sda3 /
+          mount /dev/sda1 /
           sh "dd if=/dev/zero of=/zero.file bs=4M status=progress || true"
           rm /zero.file
           umount /
           EOF
           echo "Free space zeroed out."
           
+          # 同步缓存，确保所有写入都已落盘
           sudo sync
           
-          qemu-img convert -c -O qcow2 debian-12-xfs-uncompacted.qcow2 debian-12-xfs.qcow2
+          # 步骤 4: 使用 qemu-img convert 进行最终的压缩和稀疏化
+          qemu-img convert -c -O qcow2 debian-13-xfs-uncompacted.qcow2 debian-13-xfs.qcow2
           
           echo "Image sparsified. Final physical size:"
-          ls -lh debian-12-xfs.qcow2
+          ls -lh debian-13-xfs.qcow2
 
       - name: Upload Compacted qcow2 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: debian-12-xfs-qcow2
-          path: debian-12-xfs.qcow2
+          name: debian-13-xfs-qcow2
+          path: debian-13-xfs.qcow2
           retention-days: 7
+
