@@ -1,7 +1,7 @@
 # GitHub Actions Workflow: Build, Archive, and Release Debian 13 (Trixie) Multi-Format Images
-# This workflow automates creating Debian 13 images with an XFS root filesystem.
-# It uploads each uncompressed image format as a separate, clearly-named artifact,
-# and publishes compressed archives to a public GitHub Release.
+# This workflow uses a best-practice, master-image approach for maximum quality and consistency.
+# It creates a pristine master RAW image, performs all modifications on it, and then
+# converts it to all final target formats.
 
 name: Build and Release Debian 13 (Trixie) Multi-Format Images
 
@@ -37,53 +37,43 @@ jobs:
           sudo mkdir -p /etc/libguestfs-tools.d
           echo 'apparmor_disable = 1' | sudo tee /etc/libguestfs-tools.d/99-apparmor-disable.conf
 
-      # 4. Download Debian 13 Image
-      - name: Download Debian 13 (Trixie) Cloud Image
-        run: |
-          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/trixie/daily/latest/debian-13-nocloud-amd64-daily.qcow2
-
-      # 5. Define Image Basename
+      # 4. Define Image Basename
       - name: Define Image Basename
         id: image_info
         run: echo "basename=debian-13-xfs" >> $GITHUB_OUTPUT
 
-      # 6. Resize, Convert to XFS, and Export Partition Name
-      - name: Resize, Convert to XFS, and Export Partition Name
-        id: convert_to_xfs
+      # 5. (已重构) Create, Modify, and Finalize Master RAW Image
+      - name: Create and Finalize Master RAW Image
+        id: create_master_image
         run: |
           set -ex
-          BASENAME=${{ steps.image_info.outputs.basename }}
-          UNCOMPACTED_IMAGE_NAME="${BASENAME}-uncompacted.qcow2"
           
-          qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 3.3G
-          chmod 666 $UNCOMPACTED_IMAGE_NAME
-          sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
+          # 定义主工作镜像的文件名
+          MASTER_RAW_IMAGE="master.raw"
           
-          ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w 'ext4' | awk '{print $1}')
+          # 下载官方 qcow2 镜像
+          echo "Downloading official Debian 13 qcow2 image..."
+          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/trixie/daily/latest/debian-13-nocloud-amd64-daily.qcow2
+          
+          # 创建一个目标大小的 RAW 镜像用于扩容
+          echo "Creating target-sized RAW image..."
+          qemu-img create -f raw $MASTER_RAW_IMAGE 3.3G
+          chmod 666 $MASTER_RAW_IMAGE
+          
+          # 将原始镜像扩容到新的 RAW 镜像中
+          echo "Expanding original image into the master RAW image..."
+          sudo virt-resize --expand /dev/sda1 original.qcow2 $MASTER_RAW_IMAGE
+          
+          # 在 master RAW 镜像上进行文件系统转换
+          echo "Converting filesystem to XFS on the master RAW image..."
+          ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $MASTER_RAW_IMAGE | grep -w 'ext4' | awk '{print $1}')
           if [ -z "$ROOT_PARTITION" ]; then echo "::error::Could not find ext4 root partition."; exit 1; fi
           echo "Root partition found: $ROOT_PARTITION"
-          echo "root_partition_name=${ROOT_PARTITION}" >> $GITHUB_OUTPUT
+          sudo virt-rescue --rw -a $MASTER_RAW_IMAGE --sh "fstransform ${ROOT_PARTITION} xfs"
           
-          sudo virt-rescue --rw -a $UNCOMPACTED_IMAGE_NAME --sh "fstransform ${ROOT_PARTITION} xfs"
-
-      # 7. Inspect Filesystem Usage
-      - name: Inspect Filesystem Usage
-        run: |
-          echo "Inspecting final filesystem usage before zeroing..."
-          sudo virt-df -h -a ${{ steps.image_info.outputs.basename }}-uncompacted.qcow2
-
-      # 8. Zero-out, Convert, and Compress
-      - name: Zero-out, Convert, and Compress
-        run: |
-          set -ex
-          BASENAME=${{ steps.image_info.outputs.basename }}
-          UNCOMPACTED_IMAGE_NAME="${BASENAME}-uncompacted.qcow2"
-          ROOT_PARTITION=${{ steps.convert_to_xfs.outputs.root_partition_name }}
-          if [ -z "$ROOT_PARTITION" ]; then echo "::error::Failed to get root partition name from previous step."; exit 1; fi
-          echo "Using partition name from previous step: $ROOT_PARTITION"
-
-          echo "Zeroing out free space for maximum sparsification..."
-          sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<EOF
+          # 在 master RAW 镜像上清理空余空间
+          echo "Zeroing out free space on the master RAW image..."
+          sudo guestfish --rw -a $MASTER_RAW_IMAGE <<EOF
           run
           mount ${ROOT_PARTITION} /
           sh "dd if=/dev/zero of=/zero.file bs=4M status=progress || true"
@@ -92,46 +82,66 @@ jobs:
           EOF
           sudo sync
           
-          echo "Converting to all target formats..."
-          qemu-img convert -c -O qcow2 $UNCOMPACTED_IMAGE_NAME "${BASENAME}.qcow2"
-          qemu-img convert -O raw $UNCOMPACTED_IMAGE_NAME "${BASENAME}.raw"
-          qemu-img convert -O vpc $UNCOMPACTED_IMAGE_NAME "${BASENAME}.vhd"
-          qemu-img convert -O vhdx $UNCOMPACTED_IMAGE_NAME "${BASENAME}.vhdx"
+          echo "Master RAW image is finalized and ready for conversion."
+          # 将主镜像文件名输出，供后续步骤使用
+          echo "master_image_name=${MASTER_RAW_IMAGE}" >> $GITHUB_OUTPUT
+
+      # 6. (已重构) Convert Master Image to All Target Formats
+      - name: Convert Master Image to All Target Formats
+        run: |
+          set -ex
+          BASENAME=${{ steps.image_info.outputs.basename }}
+          MASTER_IMAGE=${{ steps.create_master_image.outputs.master_image_name }}
           
-          echo "Compressing all images..."
+          echo "Converting master RAW image to all target formats..."
+          
+          # 直接将处理好的 master.raw 重命名为最终的 raw 格式
+          mv $MASTER_IMAGE "${BASENAME}.raw"
+          
+          # 从最终的 raw 镜像转换为其他格式
+          qemu-img convert -f raw -O qcow2 -c "${BASENAME}.raw" "${BASENAME}.qcow2"
+          qemu-img convert -f raw -O vpc "${BASENAME}.raw" "${BASENAME}.vhd"
+          qemu-img convert -f raw -O vhdx "${BASENAME}.raw" "${BASENAME}.vhdx"
+          
+          echo "All image formats created successfully."
+
+      # 7. Compress All Final Images
+      - name: Compress All Final Images
+        run: |
+          set -ex
+          BASENAME=${{ steps.image_info.outputs.basename }}
+          
+          echo "Compressing all final images with Zstandard..."
           for file in ${BASENAME}.qcow2 ${BASENAME}.raw ${BASENAME}.vhd ${BASENAME}.vhdx; do
             zstd -T0 "$file" -o "${file}.zst"
           done
           
-          echo "All files generated and compressed. Final list:"
+          echo "All files compressed. Final list:"
           ls -lh ${BASENAME}*
 
-      # 9. (已修改) 分别上传每一个未压缩的镜像，使其在构建产物中清晰可见
-      - name: Upload QCOW2 Image to Artifacts
+      # 8. Upload Individual Uncompressed Images to Artifacts
+      - name: Upload QCOW2 Image
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.image_info.outputs.basename }}.qcow2
           path: ${{ steps.image_info.outputs.basename }}.qcow2
-
-      - name: Upload RAW Image to Artifacts
+      - name: Upload RAW Image
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.image_info.outputs.basename }}.raw
           path: ${{ steps.image_info.outputs.basename }}.raw
-
-      - name: Upload VHD Image to Artifacts
+      - name: Upload VHD Image
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.image_info.outputs.basename }}.vhd
           path: ${{ steps.image_info.outputs.basename }}.vhd
-
-      - name: Upload VHDX Image to Artifacts
+      - name: Upload VHDX Image
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.image_info.outputs.basename }}.vhdx
           path: ${{ steps.image_info.outputs.basename }}.vhdx
 
-      # 10. Create GitHub Release and Upload Compressed Archives
+      # 9. Create GitHub Release and Upload Compressed Archives
       - name: Create Release and Upload Compressed Archives
         uses: softprops/action-gh-release@v2
         with:
