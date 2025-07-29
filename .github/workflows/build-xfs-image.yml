@@ -1,40 +1,3 @@
-name: Build and Release Debian 13 (Trixie) Multi-Format Images
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          # 添加 zstd 用于最终的压缩
-          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs libguestfs-xfs zstd
-
-      - name: Configure libguestfs for CI Environment
-        run: |
-          sudo mkdir -p /etc/libguestfs-tools.d
-          echo 'apparmor_disable = 1' | sudo tee /etc/libguestfs-tools.d/99-apparmor-disable.conf
-
-      - name: Download Debian 13 (Trixie) Cloud Image
-        run: |
-          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/trixie/daily/latest/debian-13-nocloud-amd64-daily.qcow2
-
-      - name: Define Image Basename
-        id: image_info
-        run: echo "basename=debian-13-xfs" >> $GITHUB_OUTPUT
-
       - name: Resize, Convert, and Generate Final Images
         run: |
           set -ex
@@ -42,20 +5,18 @@ jobs:
           BASENAME=${{ steps.image_info.outputs.basename }}
           UNCOMPACTED_IMAGE_NAME="${BASENAME}-uncompacted.qcow2"
 
-          # 步骤 1: 创建目标镜像 (大小改为 3G) 并调整分区
-          # 警告: 3G 非常小，可能导致 virt-resize 失败。建议使用 4G 或 5G。
-          qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 3G
+          # 步骤 1: 创建目标镜像 (大小改为 3.5G) 并调整分区
+          # 这提供了足够的空间来避免 virt-resize 错误
+          qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 3.5G
           chmod 666 $UNCOMPACTED_IMAGE_NAME
           sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
           
-          # 步骤 2: 动态查找根分区 (通过 ext4 文件系统类型)
+          # 步骤 2: 动态查找根分区
           echo "Finding the root partition to convert..."
           ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w 'ext4' | awk '{print $1}')
           
           if [ -z "$ROOT_PARTITION" ]; then
             echo "::error::Could not find the ext4 root partition to convert."
-            echo "::debug::virt-filesystems output:"
-            sudo virt-filesystems --long --all -a $UNCOMPACTED_IMAGE_NAME
             exit 1
           fi
           echo "Root partition found: $ROOT_PARTITION"
@@ -64,7 +25,7 @@ jobs:
           echo "Converting filesystem on $ROOT_PARTITION to XFS..."
           sudo virt-rescue --rw -a $UNCOMPACTED_IMAGE_NAME --sh "fstransform ${ROOT_PARTITION} xfs"
           
-          # 步骤 4: 零填充自由空间（这是实现最大稀疏化的关键步骤）
+          # 步骤 4: 零填充自由空间以实现最大稀疏化
           echo "Zeroing out free space to enable maximum sparsification..."
           sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<EOF
           run
@@ -76,19 +37,16 @@ jobs:
           
           sudo sync
           
-          # 步骤 5: 从“黄金母版”生成所有稀疏的最终镜像
+          # 步骤 5: 从母版生成所有稀疏的最终镜像
           echo "Converting the master image to all target formats (sparsified)..."
           
-          # qcow2 (本身就是稀疏的，-c 进一步压缩元数据)
           qemu-img convert -c -O qcow2 $UNCOMPACTED_IMAGE_NAME "${BASENAME}.qcow2"
           
-          # raw (使用 -S 选项创建稀疏文件，使其物理大小远小于逻辑大小)
-          qemu-img convert -S 3G -O raw $UNCOMPACTED_IMAGE_NAME "${BASENAME}.raw"
+          # 同样在此处将 -S 选项的逻辑大小更新为 3.5G
+          qemu-img convert -S 3.5G -O raw $UNCOMPACTED_IMAGE_NAME "${BASENAME}.raw"
           
-          # vhd (vpc) (本身就是动态扩展/稀疏的)
           qemu-img convert -O vpc $UNCOMPACTED_IMAGE_NAME "${BASENAME}.vhd"
           
-          # vhdx (本身就是动态扩展/稀疏的)
           qemu-img convert -O vhdx $UNCOMPACTED_IMAGE_NAME "${BASENAME}.vhdx"
           
           echo "Sparsified images generated. Physical sizes:"
@@ -100,24 +58,8 @@ jobs:
           echo "Compressing all generated images with Zstandard..."
           for file in ${BASENAME}.qcow2 ${BASENAME}.raw ${BASENAME}.vhd ${BASENAME}.vhdx; do
             echo "Compressing $file..."
-            # -T0 使用所有可用的CPU核心来加速
             zstd -T0 "$file" -o "${file}.zst"
           done
 
           echo "All compressed archives created."
           ls -lh ${BASENAME}.*.zst
-
-      - name: Create Release and Upload All Artifacts
-        uses: softprops/action-gh-release@v2
-        with:
-          # 更新通配符以匹配所有原始镜像和 .zst 压缩包
-          files: ${{ steps.image_info.outputs.basename }}*
-          tag_name: debian-13-xfs-${{ github.run_id }}
-          name: "Debian 13 XFS Images (Build ${{ github.run_id }})"
-          body: |
-            Automated build of Debian 13 (Trixie) with an XFS root filesystem.
-            
-            Images are provided in two sets:
-            1.  **Sparsified Images** (`.qcow2`, `.raw`, `.vhd`, `.vhdx`): Ready to use directly. The `.raw` image is sparse and will not consume its full logical size on disk initially.
-            2.  **Zstandard Compressed** (`.zst`): Highly compressed archives for faster downloads. Decompress with `zstd -d <file.zst>` before use.
-          prerelease: true
