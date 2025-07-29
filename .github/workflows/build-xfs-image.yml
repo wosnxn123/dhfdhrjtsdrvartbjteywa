@@ -1,3 +1,58 @@
+# GitHub Actions Workflow: Build and Release Debian 13 (Trixie) Multi-Format Images
+# This workflow automates the process of creating customized Debian 13 virtual machine images.
+# It converts the root filesystem to XFS, generates multiple popular disk formats,
+# and provides both ready-to-use sparse images and highly compressed archives.
+
+name: Build and Release Debian 13 (Trixie) Multi-Format Images
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push events but only for the main branch
+  push:
+    branches:
+      - main
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Grant permissions for the softprops/action-gh-release action to create a release
+    permissions:
+      contents: write
+      
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Install all necessary system dependencies
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          # Install QEMU tools, libguestfs for disk manipulation, XFS tools, and zstd for compression
+          sudo apt-get install -y --no-install-recommends qemu-utils libguestfs-tools xfsprogs libguestfs-xfs zstd
+
+      # 3. Workaround for libguestfs in some CI environments
+      - name: Configure libguestfs for CI Environment
+        run: |
+          sudo mkdir -p /etc/libguestfs-tools.d
+          echo 'apparmor_disable = 1' | sudo tee /etc/libguestfs-tools.d/99-apparmor-disable.conf
+
+      # 4. Download the base Debian 13 cloud image
+      - name: Download Debian 13 (Trixie) Cloud Image
+        run: |
+          wget -O original.qcow2 https://cdimage.debian.org/images/cloud/trixie/daily/latest/debian-13-nocloud-amd64-daily.qcow2
+
+      # 5. Define a base name for all output images for easy reference
+      - name: Define Image Basename
+        id: image_info
+        run: echo "basename=debian-13-xfs" >> $GITHUB_OUTPUT
+
+      # 6. The core logic: Resize, Convert, Sparsify, and Compress
       - name: Resize, Convert, and Generate Final Images
         run: |
           set -ex
@@ -5,13 +60,13 @@
           BASENAME=${{ steps.image_info.outputs.basename }}
           UNCOMPACTED_IMAGE_NAME="${BASENAME}-uncompacted.qcow2"
 
-          # 步骤 1: 创建目标镜像 (大小改为 3.5G) 并调整分区
-          # 这提供了足够的空间来避免 virt-resize 错误
+          # Step 1: Create the target image with a 3.5GB logical size and expand the root partition into it.
+          # This size is a safe compromise to avoid the virt-resize "no surplus space" error.
           qemu-img create -f qcow2 -o compression_type=zlib $UNCOMPACTED_IMAGE_NAME 3.5G
           chmod 666 $UNCOMPACTED_IMAGE_NAME
           sudo virt-resize --expand /dev/sda1 original.qcow2 $UNCOMPACTED_IMAGE_NAME
           
-          # 步骤 2: 动态查找根分区
+          # Step 2: Dynamically find the root partition (which is still ext4 at this point).
           echo "Finding the root partition to convert..."
           ROOT_PARTITION=$(sudo virt-filesystems --long --filesystems -a $UNCOMPACTED_IMAGE_NAME | grep -w 'ext4' | awk '{print $1}')
           
@@ -21,11 +76,11 @@
           fi
           echo "Root partition found: $ROOT_PARTITION"
 
-          # 步骤 3: 转换文件系统为 XFS
+          # Step 3: Use virt-rescue to perform the filesystem conversion from ext4 to XFS.
           echo "Converting filesystem on $ROOT_PARTITION to XFS..."
           sudo virt-rescue --rw -a $UNCOMPACTED_IMAGE_NAME --sh "fstransform ${ROOT_PARTITION} xfs"
           
-          # 步骤 4: 零填充自由空间以实现最大稀疏化
+          # Step 4: Zero out all free space within the filesystem. This is crucial for making the final images highly sparse.
           echo "Zeroing out free space to enable maximum sparsification..."
           sudo guestfish --rw -a $UNCOMPACTED_IMAGE_NAME <<EOF
           run
@@ -37,16 +92,20 @@
           
           sudo sync
           
-          # 步骤 5: 从母版生成所有稀疏的最终镜像
+          # Step 5: Convert the zeroed-out master image into all target formats.
+          # These images will be sparse, meaning their physical size on disk will be much smaller than their logical size.
           echo "Converting the master image to all target formats (sparsified)..."
           
+          # qcow2 (natively sparse, -c compresses metadata)
           qemu-img convert -c -O qcow2 $UNCOMPACTED_IMAGE_NAME "${BASENAME}.qcow2"
           
-          # 同样在此处将 -S 选项的逻辑大小更新为 3.5G
+          # raw (using -S to create a sparse file with a logical size of 3.5G)
           qemu-img convert -S 3.5G -O raw $UNCOMPACTED_IMAGE_NAME "${BASENAME}.raw"
           
+          # vhd (vpc) (natively sparse / dynamic)
           qemu-img convert -O vpc $UNCOMPACTED_IMAGE_NAME "${BASENAME}.vhd"
           
+          # vhdx (natively sparse / dynamic)
           qemu-img convert -O vhdx $UNCOMPACTED_IMAGE_NAME "${BASENAME}.vhdx"
           
           echo "Sparsified images generated. Physical sizes:"
@@ -54,12 +113,30 @@
           echo "Disk usage:"
           du -sh ${BASENAME}.*
           
-          # 步骤 6: 创建所有镜像的 Zstandard 压缩版本
+          # Step 6: Create Zstandard compressed archives for each generated image for efficient distribution.
           echo "Compressing all generated images with Zstandard..."
           for file in ${BASENAME}.qcow2 ${BASENAME}.raw ${BASENAME}.vhd ${BASENAME}.vhdx; do
             echo "Compressing $file..."
+            # -T0 uses all available CPU cores to speed up compression
             zstd -T0 "$file" -o "${file}.zst"
           done
 
           echo "All compressed archives created."
           ls -lh ${BASENAME}.*.zst
+
+      # 7. Create a GitHub Release and upload all generated files (both sparse images and .zst archives)
+      - name: Create Release and Upload All Artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          # The glob pattern '*' ensures all files starting with the basename are uploaded
+          files: ${{ steps.image_info.outputs.basename }}*
+          tag_name: debian-13-xfs-${{ github.run_id }}
+          name: "Debian 13 XFS Images (Build ${{ github.run_id }})"
+          body: |
+            Automated build of Debian 13 (Trixie) with an XFS root filesystem.
+            Logical disk size: 3.5GB.
+            
+            Images are provided in two sets:
+            1.  **Sparsified Images** (`.qcow2`, `.raw`, `.vhd`, `.vhdx`): Ready to use directly. The `.raw` image is sparse and will not consume its full logical size on disk initially.
+            2.  **Zstandard Compressed** (`.zst`): Highly compressed archives for faster downloads. Decompress with `zstd -d <file.zst>` before use.
+          prerelease: true
