@@ -1,0 +1,38 @@
+[common]
+server_addr = cn-sh-2.lcf.im
+server_port = 2333
+tcp_mux = true
+protocol = tcp
+user = db758fb326a48cb3a2911be730661308
+
+token = LoCyanToken
+dns_server = 223.6.6.6
+tls_enable = false
+
+[tshock]
+privilege_mode = true
+type = tcp
+local_ip = 127.0.0.1
+local_port = 7777
+remote_port = 28893
+
+[LeviLamina111]
+privilege_mode = true
+type = tcp
+local_ip = 127.0.0.1
+local_port = 19132
+remote_port = 36560
+
+[LeviLaminaudp]
+privilege_mode = true
+type = udp
+local_ip = 127.0.0.1
+local_port = 19132
+remote_port = 36560
+
+[win2022]
+privilege_mode = true
+type = tcp
+local_ip = 127.0.0.1
+local_port = 3389
+remote_port = 49536
