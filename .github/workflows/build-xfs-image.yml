@@ -3,7 +3,7 @@
 # It creates a pristine master RAW image, performs all modifications on it, and then
 # converts it to all final target formats.
 
-name: Build and Release Debian 13 (Trixie) Multi-Format Images
+#name: Build and Release Debian 13 (Trixie) Multi-Format Images
 
 on:
   push:
