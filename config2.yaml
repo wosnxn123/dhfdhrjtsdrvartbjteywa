@@ -26,7 +26,7 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
       interval: 1800
     override:
-      additional-prefix: "备用 | "
+      additional-prefix: "推荐 | "
       udp: true
 
 # 单个代理配置 (用于落地节点)
@@ -47,12 +47,12 @@ proxies:
   # --- WARP 配置 开始 (已按您提供的标准重新翻译) ---
   - name: WARP-链式代理 # WARP 链式代理
     type: wireguard
-    ip: 172.16.0.2
-    ipv6: 2606:4700:110:86d7:7a94:2546:6d1b:a26
-    private-key: 'QJ6/xrfdnFE2E1lFC5T/MhHkMgPU8DwI2wlXfJrokUI='
+    ip: 100.96.0.9/32
+    ipv6: 2606:4700:cf1:1000::6/128
+    private-key: 'GIHAJs9Wpj3CHwA6oMYrkdhdOQbgRZ4VI9mUkog2MUk='
     mtu: 1280
     peers:
-      - server: engage.cloudflareclient.com
+      - server: 162.159.193.10
         port: 2408
         public-key: 'bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo='
         allowed-ips: ['0.0.0.0/0', '::/0']
@@ -61,12 +61,12 @@ proxies:
 
   - name: WARP-直连代理 # WARP 直连代理
     type: wireguard
-    ip: 172.16.0.2
-    ipv6: 2606:4700:110:86d7:7a94:2546:6d1b:a26
-    private-key: 'QJ6/xrfdnFE2E1lFC5T/MhHkMgPU8DwI2wlXfJrokUI='
+    ip: 100.96.0.9/32
+    ipv6: 2606:4700:cf1:1000::6/128
+    private-key: 'GIHAJs9Wpj3CHwA6oMYrkdhdOQbgRZ4VI9mUkog2MUk='
     mtu: 1280
     peers:
-      - server: engage.cloudflareclient.com
+      - server: 162.159.193.10
         port: 2408
         public-key: 'bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo='
         allowed-ips: ['0.0.0.0/0', '::/0']
@@ -429,7 +429,6 @@ proxy-groups:
     use:
       - p1
       - p2
-      - p3
     exclude-filter: '^(?:webshare)$' # 排除落地节点 (根据脚本逻辑添加)
     icon: https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/balance.svg
     # --- groupBaseOption 展开 ---
