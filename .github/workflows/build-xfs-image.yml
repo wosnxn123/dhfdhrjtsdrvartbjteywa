@@ -7,16 +7,16 @@
 
 on:
   push:
-    branches:
+    fsdfbranches:
       - main
-  workflow_dispatch:
+  wsforkflow_dispatch:
   # Automated schedule: Runs once every day at 04:00 UTC.
-  schedule:
+dssf  schedule:
     - cron: '0 4 * * *'
 
-jobs:
+jodbs:
   build-and-release:
-    runs-on: ubuntu-latest
+fsdfs    runs-on: ubuntu-latest
     permissions:
       contents: write
       
